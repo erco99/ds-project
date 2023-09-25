@@ -4,24 +4,24 @@ import fe.app.util.Pair;
 
 import java.util.ArrayList;
 
-public class VehiclesMonitor {
+public class MapContext {
 
     private ArrayList<Vehicle> vehicles;
 
-    public VehiclesMonitor() {
+    public MapContext() {
         this.vehicles = new ArrayList<>();
     }
 
     public synchronized void addVehicle(){
         Vehicle agent = new Vehicle(this);
-        agent.add(agent);
+        this.vehicles.add(agent);
         agent.start();
     }
 
-    public ArrayList<Pair<Integer, Integer>> getVehiclesPosition() {
-        ArrayList<Pair<Integer,Integer>> positions = new ArrayList<>();
+    public ArrayList<Pair<Double, Double>> getVehiclesPosition() {
+        ArrayList<Pair<Double,Double>> positions = new ArrayList<>();
         for(Vehicle vehicle : this.vehicles) {
-            positions.add(new Pair<>(vehicle.getX(), vehicle.getY()));
+            positions.add(new Pair<>(vehicle.getPosition().getX(), vehicle.getPosition().getY()));
         }
 
         return positions;
