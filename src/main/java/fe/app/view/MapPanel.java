@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public class MapPanel extends JPanel {
 
     private ArrayList<Pair<Double, Double>> positions;
-    private static final int WIDTH_DIMENSION = 800;
-    private static final int HEIGHT_DIMENSION = 800;
+    private static final int WIDTH_DIMENSION = 1200;
+    private static final int HEIGHT_DIMENSION = 1000;
     private long dx;
     private long dy;
     public MapPanel() {
@@ -45,6 +45,9 @@ public class MapPanel extends JPanel {
                     g2.setTransform(saved);
                 });
             }
+
+            g2.drawLine(30,30,60,60);
+            g2.drawLine(30,40,60,70);
         }
     }
 
