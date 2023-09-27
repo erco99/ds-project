@@ -20,7 +20,7 @@ public class MapPanel extends JPanel {
         dy = HEIGHT_DIMENSION/2 - 20;
     }
 
-    public void paint(Graphics g) {
+    public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
 
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -56,6 +56,6 @@ public class MapPanel extends JPanel {
             this.positions = positions;
         }
         System.out.println(this.positions);
-        repaint();
+        repaint(new Rectangle(30,30,90,90));
     }
 }
