@@ -1,11 +1,15 @@
 package fe.app.view;
 
+import fe.app.model.elements.Street;
+import fe.app.model.elements.StreetMap;
 import fe.app.util.Pair;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MapPanel extends JPanel {
 
@@ -43,11 +47,25 @@ public class MapPanel extends JPanel {
                     Rectangle rect = new Rectangle(x0,y0,20,10);
                     g2.draw(rect);
                     g2.setTransform(saved);
+
                 });
             }
 
-            g2.drawLine(30,30,60,60);
-            g2.drawLine(30,40,60,70);
+            StreetMap streetMap = new StreetMap();
+            streetMap.create();
+
+            ArrayList<Street> prova = new ArrayList<>(streetMap.getHorizontalStreets());
+            prova.addAll(streetMap.getVerticalStreets());
+
+            for (Street street : prova) {
+                street.getFirstSide().paint(g2);
+                street.getSecondSide().paint(g2);
+            }
+
+            for (Polygon intersection : streetMap.getIntersections()) {
+                g2.setColor(Color.WHITE);
+                g2.drawPolygon(intersection);
+            }
         }
     }
 
@@ -56,6 +74,6 @@ public class MapPanel extends JPanel {
             this.positions = positions;
         }
         System.out.println(this.positions);
-        repaint(new Rectangle(30,30,90,90));
+        //repaint(new Rectangle(30,30,90,90));
     }
 }
