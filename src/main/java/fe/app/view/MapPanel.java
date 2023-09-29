@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MapPanel extends JPanel {
 
@@ -18,7 +16,11 @@ public class MapPanel extends JPanel {
     private static final int HEIGHT_DIMENSION = 1000;
     private long dx;
     private long dy;
-    public MapPanel() {
+    private StreetMap streetMap;
+
+    public MapPanel(StreetMap streetMap) {
+        this.streetMap = streetMap;
+        streetMap.create();
         this.setPreferredSize(new Dimension(WIDTH_DIMENSION,HEIGHT_DIMENSION));
         dx = WIDTH_DIMENSION/2 - 20;
         dy = HEIGHT_DIMENSION/2 - 20;
@@ -32,6 +34,7 @@ public class MapPanel extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_RENDERING,
                 RenderingHints.VALUE_RENDER_QUALITY);
         g2.clearRect(0,0,this.getWidth(),this.getHeight());
+
         synchronized (this){
             if (positions!=null){
                 positions.forEach(p -> {
@@ -50,23 +53,8 @@ public class MapPanel extends JPanel {
 
                 });
             }
-
-            StreetMap streetMap = new StreetMap();
-            streetMap.create();
-
-            ArrayList<Street> prova = new ArrayList<>(streetMap.getHorizontalStreets());
-            prova.addAll(streetMap.getVerticalStreets());
-
-            for (Street street : prova) {
-                street.getFirstSide().paint(g2);
-                street.getSecondSide().paint(g2);
-            }
-
-            for (Polygon intersection : streetMap.getIntersections()) {
-                g2.setColor(Color.WHITE);
-                g2.drawPolygon(intersection);
-            }
         }
+        paintStreetMap(g2);
     }
 
     public void updateVehiclesPosition(ArrayList<Pair<Double, Double>> positions){
@@ -74,6 +62,28 @@ public class MapPanel extends JPanel {
             this.positions = positions;
         }
         System.out.println(this.positions);
-        //repaint(new Rectangle(30,30,90,90));
+        repaint();
+    }
+
+    private void paintStreetMap(Graphics2D g2) {
+        ArrayList<Street> prova = new ArrayList<>(streetMap.getHorizontalStreets());
+        prova.addAll(streetMap.getVerticalStreets());
+
+        for (Street street : prova) {
+            street.getFirstSide().paint(g2);
+            street.getSecondSide().paint(g2);
+        }
+
+        for (Street street : prova) {
+
+            g2.setColor(Color.BLUE);
+            street.getRightWay().paint(g2);
+            street.getLeftWay().paint(g2);
+        }
+
+        for (Polygon intersection : streetMap.getIntersections()) {
+            g2.setColor(g2.getBackground());
+            g2.drawPolygon(intersection);
+        }
     }
 }
