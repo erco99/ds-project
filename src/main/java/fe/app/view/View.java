@@ -1,5 +1,7 @@
 package fe.app.view;
 
+import fe.app.model.elements.StreetMap;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,7 +14,8 @@ public class View {
         frame = new JFrame("App");
         frame.setLayout(new BorderLayout());
 
-        mapPanel = new MapPanel();
+        StreetMap streetMap = new StreetMap();
+        mapPanel = new MapPanel(streetMap);
         frame.add(mapPanel);
 
         frame.pack();
@@ -21,7 +24,7 @@ public class View {
         frame.setVisible(true);
     }
 
-    public MapPanel getMapPanel()    {
+    public MapPanel getMapPanel() {
         return mapPanel;
     }
 
