@@ -6,9 +6,11 @@ public class DirectionLine extends Line {
 
     private Pair<Integer, Integer> startingPoint;
     private Pair<Integer, Integer> endingPoint;
+    private String streetID;
 
-    public DirectionLine(Pair<Integer, Integer> startingPoint, Pair<Integer,Integer> endingPoint) {
+    public DirectionLine(String streetID, Pair<Integer, Integer> startingPoint, Pair<Integer,Integer> endingPoint) {
         super(startingPoint.getX(), startingPoint.getY(), endingPoint.getX(), endingPoint.getY());
+        this.streetID = streetID;
     }
 
     public Pair<Integer, Integer> getStartingPoint() {
@@ -18,5 +20,10 @@ public class DirectionLine extends Line {
     public Pair<Integer, Integer> getEndingPoint() {
         return endingPoint;
     }
+
+    public String getStreetID() {
+        return streetID;
+    }
+
 
 }
