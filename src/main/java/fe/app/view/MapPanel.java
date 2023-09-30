@@ -1,5 +1,6 @@
 package fe.app.view;
 
+import fe.app.model.elements.Intersection;
 import fe.app.model.elements.Street;
 import fe.app.model.elements.StreetMap;
 import fe.app.util.Pair;
@@ -41,7 +42,6 @@ public class MapPanel extends JPanel {
                     int x0 = (int)(dx+p.getX()*dx);
                     int y0 = (int)(dy-p.getY()*dy);
 
-
                     final AffineTransform saved = g2.getTransform();
                     final AffineTransform rotate = AffineTransform.getRotateInstance(
                             Math.toRadians(360), x0, y0);
@@ -75,15 +75,22 @@ public class MapPanel extends JPanel {
         }
 
         for (Street street : prova) {
-
             g2.setColor(Color.BLUE);
             street.getRightWay().paint(g2);
             street.getLeftWay().paint(g2);
         }
 
-        for (Polygon intersection : streetMap.getIntersections()) {
+        for (Polygon intersection : streetMap.getStreetSidesIntersections()) {
             g2.setColor(g2.getBackground());
             g2.drawPolygon(intersection);
+        }
+        for (Intersection intersection: streetMap.getIntersections()) {
+            g2.setColor(Color.RED);
+
+            Integer x1 = intersection.getIntersectionPoint().getX();
+            Integer y1 = intersection.getIntersectionPoint().getY();
+
+            g2.drawLine(x1,y1,x1+3,y1+3);
         }
     }
 }
