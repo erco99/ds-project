@@ -20,12 +20,7 @@ public class MapContext {
         agent.start();
     }
 
-    public ArrayList<Pair<Double, Double>> getVehiclesPosition() {
-        ArrayList<Pair<Double,Double>> positions = new ArrayList<>();
-        for(Vehicle vehicle : this.vehicles) {
-            positions.add(new Pair<>(vehicle.getPosition().getX(), vehicle.getPosition().getY()));
-        }
-
-        return positions;
+    public ArrayList<Vehicle> getVehicles() {
+        return this.vehicles;
     }
 }

@@ -18,7 +18,7 @@ public class VehicleViewer extends Thread {
     public void run() {
         while (!stop) {
             long t0 = System.currentTimeMillis();
-            mapPanel.updateVehiclesPosition(mapContext.getVehiclesPosition());
+            mapPanel.updateVehiclesPosition(mapContext.getVehicles());
             long t1 = System.currentTimeMillis();
             //log("update pos");
             long dt = (1000 / FRAMES_PER_SEC) - (t1-t0);
