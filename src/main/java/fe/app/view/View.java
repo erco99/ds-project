@@ -10,11 +10,10 @@ public class View {
     MapPanel mapPanel;
     static JFrame frame;
 
-    public void start() {
+    public void start(StreetMap streetMap) {
         frame = new JFrame("App");
         frame.setLayout(new BorderLayout());
 
-        StreetMap streetMap = new StreetMap();
         mapPanel = new MapPanel(streetMap);
         frame.add(mapPanel);
 

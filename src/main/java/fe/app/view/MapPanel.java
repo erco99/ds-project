@@ -77,6 +77,7 @@ public class MapPanel extends JPanel {
         for (Street street : prova) {
             g2.setColor(Color.BLUE);
             street.getRightWay().paint(g2);
+            g2.setColor(Color.CYAN);
             street.getLeftWay().paint(g2);
         }
 
