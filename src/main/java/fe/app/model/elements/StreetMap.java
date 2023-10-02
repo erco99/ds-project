@@ -108,4 +108,9 @@ public class StreetMap {
     public ArrayList<Intersection> getIntersections() {
         return intersections;
     }
+    public Street getRandomStreet() {
+        ArrayList<Street> allStreets = new ArrayList<>(this.horizontalStreets);
+        allStreets.addAll(this.verticalStreets);
+        return allStreets.get(random.nextInt(0, allStreets.size()));
+    }
 }
