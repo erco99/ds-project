@@ -10,6 +10,8 @@ public class DirectionLine extends Line {
 
     public DirectionLine(String streetID, Pair<Integer, Integer> startingPoint, Pair<Integer,Integer> endingPoint) {
         super(startingPoint.getX(), startingPoint.getY(), endingPoint.getX(), endingPoint.getY());
+        this.startingPoint = startingPoint;
+        this.endingPoint = endingPoint;
         this.streetID = streetID;
     }
 
