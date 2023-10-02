@@ -6,12 +6,14 @@ public class Vehicle extends Thread {
 
     private Pair<Double,Double> position;
     private boolean stop;
-
     private MapContext mapContext;
+    private StreetMap streetMap;
 
-    public Vehicle(MapContext mapContext) {
+    public Vehicle(MapContext mapContext, StreetMap streetMap) {
         this.mapContext = mapContext;
-        this.position = new Pair<>(0.0,0.0);
+        this.streetMap = streetMap;
+        Pair<Integer,Integer> f = streetMap.getRandomStreet().getRightWay().getStartingPoint();
+        this.position = new Pair<>(Double.valueOf(f.getX()), Double.valueOf(f.getY()));
         this.stop = false;
     }
 
@@ -33,12 +35,10 @@ public class Vehicle extends Thread {
     }
 
     private void updatePosition() {
-        this.position = new Pair<>(this.position.getX() , this.position.getY() + 0.00036);
+        this.position = new Pair<>(this.position.getX() , this.position.getY() + 0.0036);
     }
 
     public Pair<Double, Double> getPosition() {
         return this.position;
     }
-
-
 }
