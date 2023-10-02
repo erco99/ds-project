@@ -3,7 +3,9 @@ package fe.app.view;
 import fe.app.model.elements.Intersection;
 import fe.app.model.elements.Street;
 import fe.app.model.elements.StreetMap;
+import fe.app.model.elements.Vehicle;
 import fe.app.util.Pair;
+import fe.app.util.StreetType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,19 +14,18 @@ import java.util.ArrayList;
 
 public class MapPanel extends JPanel {
 
-    private ArrayList<Pair<Double, Double>> positions;
+    public static final int VEHICLE_WIDTH = 20;
+    public static final int VEHICLE_HEIGHT = 10;
     private static final int WIDTH_DIMENSION = 1200;
     private static final int HEIGHT_DIMENSION = 1000;
-    private long dx;
-    private long dy;
+    private int streetAngle;
+    private ArrayList<Vehicle> vehicles;
     private StreetMap streetMap;
 
     public MapPanel(StreetMap streetMap) {
         this.streetMap = streetMap;
         streetMap.create();
         this.setPreferredSize(new Dimension(WIDTH_DIMENSION,HEIGHT_DIMENSION));
-        dx = WIDTH_DIMENSION/2 - 20;
-        dy = HEIGHT_DIMENSION/2 - 20;
     }
 
     public void paintComponent(Graphics g) {
@@ -37,17 +38,20 @@ public class MapPanel extends JPanel {
         g2.clearRect(0,0,this.getWidth(),this.getHeight());
 
         synchronized (this){
-            if (positions!=null){
-                positions.forEach(p -> {
-                    int x0 = (int)(dx+p.getX()*dx);
-                    int y0 = (int)(dy-p.getY()*dy);
+            if (this.vehicles!=null){
+                this.vehicles.forEach(v -> {
+                    int x0 = v.getPosition().getX().intValue();
+                    int y0 = v.getPosition().getY().intValue();
+
+                    streetAngle = v.getStreet().getType().equals("HORIZONTAL") ? 0 : 90;
 
                     final AffineTransform saved = g2.getTransform();
                     final AffineTransform rotate = AffineTransform.getRotateInstance(
-                            Math.toRadians(360), x0, y0);
+                            Math.toRadians(streetAngle), x0, y0);
                     g2.transform(rotate);
 
-                    Rectangle rect = new Rectangle(x0,y0,20,10);
+                    Rectangle rect = new Rectangle(x0 - (VEHICLE_WIDTH/2),y0 - (VEHICLE_HEIGHT/2) ,
+                            VEHICLE_WIDTH, VEHICLE_HEIGHT);
                     g2.draw(rect);
                     g2.setTransform(saved);
 
@@ -57,11 +61,10 @@ public class MapPanel extends JPanel {
         paintStreetMap(g2);
     }
 
-    public void updateVehiclesPosition(ArrayList<Pair<Double, Double>> positions){
+    public void updateVehiclesPosition(ArrayList<Vehicle> vehicles){
         synchronized(this){
-            this.positions = positions;
+            this.vehicles = vehicles;
         }
-        System.out.println(this.positions);
         repaint();
     }
 
