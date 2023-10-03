@@ -1,11 +1,9 @@
 package fe.app.view;
 
-import fe.app.model.elements.Intersection;
+import fe.app.model.elements.StreetsIntersection;
 import fe.app.model.elements.Street;
 import fe.app.model.elements.StreetMap;
 import fe.app.model.elements.Vehicle;
-import fe.app.util.Pair;
-import fe.app.util.StreetType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -87,14 +85,6 @@ public class MapPanel extends JPanel {
         for (Polygon intersection : streetMap.getStreetSidesIntersections()) {
             g2.setColor(g2.getBackground());
             g2.drawPolygon(intersection);
-        }
-        for (Intersection intersection: streetMap.getIntersections()) {
-            g2.setColor(Color.RED);
-
-            Integer x1 = intersection.getIntersectionPoint().getX();
-            Integer y1 = intersection.getIntersectionPoint().getY();
-
-            g2.drawLine(x1,y1,x1+3,y1+3);
         }
     }
 }

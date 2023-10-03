@@ -25,8 +25,9 @@ public class Vehicle extends Thread {
         this.streetMap = streetMap;
         this.street = streetMap.getRandomStreet();
 
-        this.streetMap.getIntersections().forEach(intersection ->
-                this.intersectionPoints.add(intersection.getIntersectionPoint()));
+
+        this.streetMap.getIntersections().forEach(streetsIntersection ->
+                this.intersectionPoints.addAll(streetsIntersection.getAllPoints()));
 
         setDirection();
 
@@ -70,10 +71,10 @@ public class Vehicle extends Thread {
     }
 
     private void changeStreet(Pair<Integer,Integer> position) {
-        Intersection intersection = this.streetMap.getIntersectionByPoint(position);
+        StreetsIntersection streetsIntersection = this.streetMap.getIntersectionByPoint(position);
         ArrayList<Street> intersectedStreets = new ArrayList<>();
-        intersectedStreets.add(intersection.getIntersectedStreets().getX());
-        intersectedStreets.add(intersection.getIntersectedStreets().getY());
+        intersectedStreets.add(streetsIntersection.getIntersectionStreets().getX());
+        intersectedStreets.add(streetsIntersection.getIntersectionStreets().getY());
 
         this.street = intersectedStreets.get(random.nextInt(0,2));
         this.position = Pair.toDouble(position);

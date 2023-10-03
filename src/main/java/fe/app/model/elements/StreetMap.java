@@ -15,13 +15,13 @@ public class StreetMap {
     private final ArrayList<Street> horizontalStreets;
     private final ArrayList<Street> verticalStreets;
     private final ArrayList<Polygon> streetSidesIntersections;
-    private final ArrayList<Intersection> intersections;
+    private final ArrayList<StreetsIntersection> streetsIntersections;
 
     public StreetMap() {
         this.horizontalStreets = new ArrayList<>();
         this.verticalStreets = new ArrayList<>();
         this.streetSidesIntersections = new ArrayList<>();
-        this.intersections = new ArrayList<>();
+        this.streetsIntersections = new ArrayList<>();
     }
 
     public void create() {
@@ -60,18 +60,14 @@ public class StreetMap {
                     new Pair<>(vFirstSide.x2, vFirstSide.y2)
                 );
 
-                intersections.add(
-                        new Intersection(getIntersectionPoint(hLeftWay,vLeftWay), new Pair<>(hStreet, vStreet))
-                );
-                intersections.add(
-                        new Intersection(getIntersectionPoint(hLeftWay,vRightWay), new Pair<>(hStreet, vStreet))
-                );
-                intersections.add(
-                        new Intersection(getIntersectionPoint(hRightWay,vLeftWay), new Pair<>(hStreet, vStreet))
-                );
-                intersections.add(
-                        new Intersection(getIntersectionPoint(hRightWay,vRightWay), new Pair<>(hStreet, vStreet))
-                );
+
+                ArrayList<WaysIntersection> intersectionWays = new ArrayList<>();
+                intersectionWays.add(new WaysIntersection(getIntersectionPoint(hLeftWay,vLeftWay),hLeftWay,vLeftWay));
+                intersectionWays.add(new WaysIntersection(getIntersectionPoint(hLeftWay,vRightWay),hLeftWay,vRightWay));
+                intersectionWays.add(new WaysIntersection(getIntersectionPoint(hRightWay,vLeftWay),hRightWay,vLeftWay));
+                intersectionWays.add(new WaysIntersection(getIntersectionPoint(hRightWay,vRightWay),hRightWay,vRightWay));
+
+                this.streetsIntersections.add(new StreetsIntersection(intersectionWays, new Pair<>(hStreet,vStreet)));
 
                 Polygon p = new Polygon();
                 p.addPoint(point.getX(), point.getY());
@@ -104,15 +100,16 @@ public class StreetMap {
         return streetSidesIntersections;
     }
 
-    public ArrayList<Intersection> getIntersections() {
-        return intersections;
+    public ArrayList<StreetsIntersection> getIntersections() {
+        return streetsIntersections;
     }
 
-    public Intersection getIntersectionByPoint(Pair<Integer,Integer> point) {
-        for (Intersection intersection : this.intersections) {
-            if (Pair.equals(intersection.getIntersectionPoint(), point)) {
-                return intersection;
-            }
+    public StreetsIntersection getIntersectionByPoint(Pair<Integer,Integer> point) {
+        for (StreetsIntersection streetsIntersection : this.streetsIntersections) {
+            for (WaysIntersection waysIntersection : streetsIntersection.getIntersectionWays())
+                if (Pair.equals(waysIntersection.getPoint(), point)) {
+                    return streetsIntersection;
+                }
         }
         return null;
     }
