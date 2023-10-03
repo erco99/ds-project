@@ -15,7 +15,6 @@ public class StreetMap {
     private final ArrayList<Street> horizontalStreets;
     private final ArrayList<Street> verticalStreets;
     private final ArrayList<Polygon> streetSidesIntersections;
-
     private final ArrayList<Intersection> intersections;
 
     public StreetMap() {
@@ -108,6 +107,16 @@ public class StreetMap {
     public ArrayList<Intersection> getIntersections() {
         return intersections;
     }
+
+    public Intersection getIntersectionByPoint(Pair<Integer,Integer> point) {
+        for (Intersection intersection : this.intersections) {
+            if (Pair.equals(intersection.getIntersectionPoint(), point)) {
+                return intersection;
+            }
+        }
+        return null;
+    }
+
     public Street getRandomStreet() {
         ArrayList<Street> allStreets = new ArrayList<>(this.horizontalStreets);
         allStreets.addAll(this.verticalStreets);
