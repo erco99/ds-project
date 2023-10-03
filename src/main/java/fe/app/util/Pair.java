@@ -61,6 +61,10 @@ public class Pair<X,Y> {
 		return new Pair<>(pair.getX().intValue(),pair.getY().intValue());
 	}
 
+	public static Pair<Double,Double> toDouble(Pair<Integer,Integer> pair) {
+		return new Pair<>(pair.getX().doubleValue(),pair.getY().doubleValue());
+	}
+
 	public static boolean equals(Pair<Integer,Integer> firstPair,Pair<Integer,Integer> secondPair) {
 		return Objects.equals(firstPair.getX(), secondPair.getX())
 				&& Objects.equals(firstPair.getY(), secondPair.getY());
