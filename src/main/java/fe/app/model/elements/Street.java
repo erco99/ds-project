@@ -37,8 +37,8 @@ public class Street {
                     new Pair<>(x + STREET_SIDE_DISTANCE, height));
 
             secondSide = new Line(x + ROADWAY_SIZE, startingPoint.getY(), x + ROADWAY_SIZE, height);
-            leftWay = new DirectionLine(this.id, new Pair<>(x + ROADWAY_SIZE - STREET_SIDE_DISTANCE, startingPoint.getY()),
-                    new Pair<>(x + ROADWAY_SIZE - STREET_SIDE_DISTANCE, height));
+            leftWay = new DirectionLine(this.id, new Pair<>(x + ROADWAY_SIZE - STREET_SIDE_DISTANCE, height),
+                    new Pair<>(x + ROADWAY_SIZE - STREET_SIDE_DISTANCE, startingPoint.getY()));
         }
     }
 
