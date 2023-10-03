@@ -4,6 +4,8 @@ package fe.app.util;
  * A standard generic Pair<X,Y>, with getters, hashCode, equals, and toString well implemented. 
  */
 
+import java.util.Objects;
+
 public class Pair<X,Y> {
 	
 	private final X x;
@@ -55,6 +57,14 @@ public class Pair<X,Y> {
 		return true;
 	}
 
+	public static Pair<Integer,Integer> toInteger(Pair<Double,Double> pair) {
+		return new Pair<>(pair.getX().intValue(),pair.getY().intValue());
+	}
+
+	public static boolean equals(Pair<Integer,Integer> firstPair,Pair<Integer,Integer> secondPair) {
+		return Objects.equals(firstPair.getX(), secondPair.getX())
+				&& Objects.equals(firstPair.getY(), secondPair.getY());
+	}
 	@Override
 	public String toString() {
 		return "Pair [x=" + x + ", y=" + y + "]";
