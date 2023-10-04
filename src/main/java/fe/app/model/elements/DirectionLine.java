@@ -27,5 +27,11 @@ public class DirectionLine extends Line {
         return streetID;
     }
 
-
+    public String getDirection() {
+        if (startingPoint.getX() == 0 || startingPoint.getY() == 0) {
+            return "right";
+        } else {
+            return "left";
+        }
+    }
 }
