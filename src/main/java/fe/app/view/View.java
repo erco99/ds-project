@@ -8,6 +8,8 @@ import java.awt.*;
 public class View {
 
     MapPanel mapPanel;
+    ControlsPanel controlsPanel;
+
     static JFrame frame;
 
     public void start(StreetMap streetMap) {
@@ -15,7 +17,10 @@ public class View {
         frame.setLayout(new BorderLayout());
 
         mapPanel = new MapPanel(streetMap);
-        frame.add(mapPanel);
+        frame.add(mapPanel, BorderLayout.CENTER);
+
+        controlsPanel = new ControlsPanel();
+        frame.add(controlsPanel, BorderLayout.EAST);
 
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
