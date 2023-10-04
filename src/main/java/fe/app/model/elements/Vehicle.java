@@ -17,14 +17,15 @@ public class Vehicle extends Thread {
     private Street street;
     private int xCoef = 0;
     private int yCoef = 0;
+    private int direction = 1;
     private ArrayList<Pair<Integer,Integer>> intersectionPoints = new ArrayList<>();
-    Random random = new Random();
+    private Random random = new Random();
+    private DirectionLine streetWay;
 
     public Vehicle(MapContext mapContext, StreetMap streetMap) {
         this.mapContext = mapContext;
         this.streetMap = streetMap;
         this.street = streetMap.getRandomStreet();
-
 
         this.streetMap.getIntersections().forEach(streetsIntersection ->
                 this.intersectionPoints.addAll(streetsIntersection.getAllPoints()));
@@ -34,10 +35,12 @@ public class Vehicle extends Thread {
         Pair<Integer,Integer> streetStartingPoint;
 
         if (random.nextBoolean()) {
+            streetWay = street.getRightWay();
             streetStartingPoint = street.getRightWay().getStartingPoint();
         } else {
+            streetWay = street.getLeftWay();
             streetStartingPoint = street.getLeftWay().getStartingPoint();
-            this.vehicleSpeed *= -1;
+            this.direction *= -1;
         }
 
         this.position = new Pair<>(Double.valueOf(streetStartingPoint.getX()), Double.valueOf(streetStartingPoint.getY()));
@@ -62,8 +65,8 @@ public class Vehicle extends Thread {
     }
 
     private void updatePosition() {
-        this.position = new Pair<>(this.position.getX() + vehicleSpeed * xCoef ,
-                this.position.getY() + vehicleSpeed * yCoef);
+        this.position = new Pair<>(this.position.getX() + vehicleSpeed * xCoef * direction ,
+                this.position.getY() + vehicleSpeed * yCoef * direction);
 
         if (isInIntersection(this.position)) {
             changeStreet(new Pair<>((int) Math.round(this.position.getX()), (int) Math.round(this.position.getY())));
@@ -71,12 +74,22 @@ public class Vehicle extends Thread {
     }
 
     private void changeStreet(Pair<Integer,Integer> position) {
-        StreetsIntersection streetsIntersection = this.streetMap.getIntersectionByPoint(position);
-        ArrayList<Street> intersectedStreets = new ArrayList<>();
-        intersectedStreets.add(streetsIntersection.getIntersectionStreets().getX());
-        intersectedStreets.add(streetsIntersection.getIntersectionStreets().getY());
+        WaysIntersection waysIntersection = this.streetMap.getWaysIntersectionByPoint(position);
 
-        this.street = intersectedStreets.get(random.nextInt(0,2));
+        ArrayList<DirectionLine> intersectedStreets = new ArrayList<>();
+        intersectedStreets.add(waysIntersection.getFirstWay());
+        intersectedStreets.add(waysIntersection.getSecondWay());
+
+        DirectionLine newStreetWay = intersectedStreets.get(random.nextInt(0,2));
+
+        if (!Objects.equals(this.streetWay.getDirection(), newStreetWay.getDirection())) {
+            this.direction *= -1;
+        }
+        this.streetWay = newStreetWay;
+        this.street = this.streetMap.getStreetById(
+                newStreetWay.getStreetID()
+        );
+
         this.position = Pair.toDouble(position);
         setDirection();
     }
