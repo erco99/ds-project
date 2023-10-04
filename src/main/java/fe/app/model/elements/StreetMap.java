@@ -104,13 +104,26 @@ public class StreetMap {
         return streetsIntersections;
     }
 
-    public StreetsIntersection getIntersectionByPoint(Pair<Integer,Integer> point) {
+    public WaysIntersection getWaysIntersectionByPoint(Pair<Integer,Integer> point) {
         for (StreetsIntersection streetsIntersection : this.streetsIntersections) {
             for (WaysIntersection waysIntersection : streetsIntersection.getIntersectionWays())
                 if (Pair.equals(waysIntersection.getPoint(), point)) {
-                    return streetsIntersection;
+                    return waysIntersection;
                 }
         }
+        return null;
+    }
+
+    public Street getStreetById(String id) {
+        ArrayList<Street> allStreets = new ArrayList<>(horizontalStreets);
+        allStreets.addAll(verticalStreets);
+
+        for (Street street : allStreets) {
+            if (street.getId() == id) {
+                return street;
+            }
+        }
+
         return null;
     }
 
