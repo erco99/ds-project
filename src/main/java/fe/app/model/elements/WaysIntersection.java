@@ -5,24 +5,24 @@ import fe.app.util.Pair;
 public class WaysIntersection {
 
     private Pair<Integer,Integer> point;
-    private DirectionLine leftWay;
-    private DirectionLine rightWay;
+    private DirectionLine firstWay;
+    private DirectionLine secondWay;
 
-    public WaysIntersection(Pair<Integer,Integer> point, DirectionLine leftWay, DirectionLine rightWay) {
+    public WaysIntersection(Pair<Integer,Integer> point, DirectionLine firstWay, DirectionLine secondWay) {
         this.point = point;
-        this.leftWay = leftWay;
-        this.rightWay = rightWay;
+        this.firstWay = firstWay;
+        this.secondWay = secondWay;
     }
 
     public Pair<Integer, Integer> getPoint() {
         return point;
     }
 
-    public DirectionLine getLeftWay() {
-        return leftWay;
+    public DirectionLine getFirstWay() {
+        return firstWay;
     }
 
-    public DirectionLine getRightWay() {
-        return rightWay;
+    public DirectionLine getSecondWay() {
+        return secondWay;
     }
 }
