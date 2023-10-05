@@ -6,7 +6,7 @@ import fe.app.util.StreetType;
 public class Street {
 
     public static final int ROADWAY_SIZE = 42;
-    private static final int STREET_SIDE_DISTANCE = 14;
+    public static final int STREET_SIDE_DISTANCE = 14;
     private final String id;
     private final Line firstSide;
     private final Line secondSide;

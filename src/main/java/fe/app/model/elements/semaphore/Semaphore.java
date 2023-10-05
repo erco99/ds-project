@@ -7,10 +7,31 @@ public class Semaphore {
     private SemaphoreState state;
     private Pair<Integer,Integer> firstSidePosition;
     private Pair<Integer,Integer> secondSidePosition;
+    private String id;
 
-    public Semaphore(SemaphoreState state, Pair<Integer, Integer> firstSidePosition, Pair<Integer, Integer> secondSidePosition) {
+    public Semaphore(SemaphoreState state,
+                     Pair<Integer, Integer> firstSidePosition,
+                     Pair<Integer, Integer> secondSidePosition,
+                     String id) {
         this.state = state;
         this.firstSidePosition = firstSidePosition;
         this.secondSidePosition = secondSidePosition;
+        this.id = id;
+    }
+
+    public SemaphoreState getState() {
+        return state;
+    }
+
+    public Pair<Integer, Integer> getFirstSidePosition() {
+        return firstSidePosition;
+    }
+
+    public Pair<Integer, Integer> getSecondSidePosition() {
+        return secondSidePosition;
+    }
+
+    public String getId() {
+        return id;
     }
 }
