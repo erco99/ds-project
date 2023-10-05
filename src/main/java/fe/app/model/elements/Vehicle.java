@@ -15,6 +15,9 @@ public class Vehicle extends Thread {
     private MapContext mapContext;
     private StreetMap streetMap;
     private Street street;
+    private Street comingStreet;
+    private StreetsIntersection streetsIntersection;
+    private int intersectionCounter = 0;
     private int xCoef = 0;
     private int yCoef = 0;
     private int direction = 1;
@@ -30,7 +33,7 @@ public class Vehicle extends Thread {
         this.streetMap.getIntersections().forEach(streetsIntersection ->
                 this.intersectionPoints.addAll(streetsIntersection.getAllPoints()));
 
-        setDirection();
+        setAngle();
 
         Pair<Integer,Integer> streetStartingPoint;
 
@@ -76,25 +79,65 @@ public class Vehicle extends Thread {
     private void changeStreet(Pair<Integer,Integer> position) {
         WaysIntersection waysIntersection = this.streetMap.getWaysIntersectionByPoint(position);
 
-        ArrayList<DirectionLine> intersectedStreets = new ArrayList<>();
-        intersectedStreets.add(waysIntersection.getFirstWay());
-        intersectedStreets.add(waysIntersection.getSecondWay());
+        ArrayList<DirectionLine> intersectedWays = new ArrayList<>();
+        intersectedWays.add(waysIntersection.getFirstWay());
+        intersectedWays.add(waysIntersection.getSecondWay());
 
-        DirectionLine newStreetWay = intersectedStreets.get(random.nextInt(0,2));
+        DirectionLine newStreetWay = intersectedWays.get(random.nextInt(0,2));
+
+        if (this.streetsIntersection == null) {
+            this.streetsIntersection = this.streetMap.getStreetsIntersectionByPoint(position);
+            this.comingStreet = this.street;
+        }
+
+        this.intersectionCounter++;
+
+        if (this.streetsIntersection.equals(this.streetMap.getStreetsIntersectionByPoint(position))) {
+            if (this.intersectionCounter == 3) {
+                if (Objects.equals(this.comingStreet.getType(), String.valueOf(StreetType.HORIZONTAL)) &&
+                        Objects.equals(this.streetMap.getStreetById(newStreetWay.getStreetID()).getType(),
+                                String.valueOf(StreetType.HORIZONTAL))) {
+                    for (DirectionLine way : intersectedWays) {
+                        if (Objects.equals(this.streetMap.getStreetById(way.getStreetID()).getType(),
+                                String.valueOf(StreetType.VERTICAL))) {
+                            newStreetWay = way;
+                            this.intersectionCounter = 0;
+                        }
+                    }
+                } else if (Objects.equals(this.comingStreet.getType(), String.valueOf(StreetType.VERTICAL)) &&
+                        Objects.equals(this.streetMap.getStreetById(newStreetWay.getStreetID()).getType(),
+                                String.valueOf(StreetType.VERTICAL))) {
+                    for (DirectionLine way : intersectedWays) {
+                        if (Objects.equals(this.streetMap.getStreetById(way.getStreetID()).getType(),
+                                String.valueOf(StreetType.HORIZONTAL))) {
+                            newStreetWay = way;
+                            this.intersectionCounter = 0;
+                        }
+                    }
+                }
+            }
+        } else {
+            this.intersectionCounter = 1;
+            this.comingStreet = this.street;
+        }
+
+        this.streetsIntersection = this.streetMap.getStreetsIntersectionByPoint(position);
 
         if (!Objects.equals(this.streetWay.getDirection(), newStreetWay.getDirection())) {
             this.direction *= -1;
         }
         this.streetWay = newStreetWay;
-        this.street = this.streetMap.getStreetById(
-                newStreetWay.getStreetID()
-        );
+        this.street = this.streetMap.getStreetById( newStreetWay.getStreetID());
 
         this.position = Pair.toDouble(position);
-        setDirection();
+        setAngle();
     }
 
-    private void setDirection() {
+    private void changeIfIllegal() {
+
+    }
+
+    private void setAngle() {
         if (Objects.equals(this.street.getType(), StreetType.HORIZONTAL.name())) {
             this.yCoef = 0;
             this.xCoef = 1;
@@ -112,6 +155,7 @@ public class Vehicle extends Thread {
         }
         return false;
     }
+
 
     public Pair<Double, Double> getPosition() {
         return this.position;
