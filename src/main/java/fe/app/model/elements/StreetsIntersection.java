@@ -3,6 +3,7 @@ package fe.app.model.elements;
 import fe.app.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class StreetsIntersection {
 
@@ -29,5 +30,12 @@ public class StreetsIntersection {
         );
 
         return points;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StreetsIntersection that)) return false;
+        return Objects.equals(intersectionWays, that.intersectionWays) && Objects.equals(intersectionStreets, that.intersectionStreets);
     }
 }
