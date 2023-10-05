@@ -1,5 +1,6 @@
-package fe.app.model.elements;
+package fe.app.model.elements.intersection;
 
+import fe.app.model.elements.street.DirectionLine;
 import fe.app.util.Pair;
 
 public class WaysIntersection {

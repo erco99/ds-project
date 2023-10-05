@@ -1,9 +1,8 @@
 package fe.app.view;
 
-import fe.app.model.elements.StreetsIntersection;
-import fe.app.model.elements.Street;
-import fe.app.model.elements.StreetMap;
-import fe.app.model.elements.Vehicle;
+import fe.app.model.elements.street.Street;
+import fe.app.model.elements.map.StreetMap;
+import fe.app.model.elements.vehicle.Vehicle;
 
 import javax.swing.*;
 import java.awt.*;

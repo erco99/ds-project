@@ -1,5 +1,6 @@
-package fe.app.model.elements;
+package fe.app.model.elements.vehicle;
 
+import fe.app.model.elements.map.MapContext;
 import fe.app.view.MapPanel;
 
 public class VehicleViewer extends Thread {

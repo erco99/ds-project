@@ -1,5 +1,6 @@
-package fe.app.model.elements;
+package fe.app.model.elements.intersection;
 
+import fe.app.model.elements.street.Street;
 import fe.app.util.Pair;
 
 import java.util.ArrayList;

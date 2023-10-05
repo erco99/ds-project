@@ -1,6 +1,6 @@
-package fe.app.model.elements;
+package fe.app.model.elements.map;
 
-import fe.app.util.Pair;
+import fe.app.model.elements.vehicle.Vehicle;
 
 import java.util.ArrayList;
 

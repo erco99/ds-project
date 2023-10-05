@@ -1,5 +1,11 @@
-package fe.app.model.elements;
+package fe.app.model.elements.vehicle;
 
+import fe.app.model.elements.intersection.StreetsIntersection;
+import fe.app.model.elements.intersection.WaysIntersection;
+import fe.app.model.elements.map.MapContext;
+import fe.app.model.elements.map.StreetMap;
+import fe.app.model.elements.street.DirectionLine;
+import fe.app.model.elements.street.Street;
 import fe.app.util.Pair;
 import fe.app.util.StreetType;
 

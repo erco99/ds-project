@@ -1,5 +1,6 @@
-package fe.app.model.elements;
+package fe.app.model.elements.street;
 
+import fe.app.model.elements.street.Line;
 import fe.app.util.Pair;
 
 public class DirectionLine extends Line {

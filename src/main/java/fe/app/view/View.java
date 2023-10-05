@@ -1,7 +1,7 @@
 package fe.app.view;
 
 import fe.app.controller.Controller;
-import fe.app.model.elements.StreetMap;
+import fe.app.model.elements.map.StreetMap;
 
 import javax.swing.*;
 import java.awt.*;

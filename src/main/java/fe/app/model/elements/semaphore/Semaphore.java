@@ -1,4 +1,4 @@
-package fe.app.model.elements;
+package fe.app.model.elements.semaphore;
 
 import fe.app.util.Pair;
 

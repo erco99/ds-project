@@ -1,10 +1,16 @@
-package fe.app.model.elements;
+package fe.app.model.elements.map;
 
+import fe.app.model.elements.intersection.StreetsIntersection;
+import fe.app.model.elements.intersection.WaysIntersection;
+import fe.app.model.elements.street.DirectionLine;
+import fe.app.model.elements.street.Line;
+import fe.app.model.elements.street.Street;
 import fe.app.util.LinesUtil;
 import fe.app.util.Pair;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 public class StreetMap {
@@ -129,7 +135,7 @@ public class StreetMap {
         allStreets.addAll(verticalStreets);
 
         for (Street street : allStreets) {
-            if (street.getId() == id) {
+            if (Objects.equals(street.getId(), id)) {
                 return street;
             }
         }

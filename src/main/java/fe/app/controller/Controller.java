@@ -1,8 +1,8 @@
 package fe.app.controller;
 
-import fe.app.model.elements.StreetMap;
-import fe.app.model.elements.VehicleViewer;
-import fe.app.model.elements.MapContext;
+import fe.app.model.elements.map.StreetMap;
+import fe.app.model.elements.vehicle.VehicleViewer;
+import fe.app.model.elements.map.MapContext;
 import fe.app.view.View;
 
 public class Controller {

@@ -1,4 +1,4 @@
-package fe.app.model.elements;
+package fe.app.model.elements.semaphore;
 
 public enum SemaphoreState {
     GREEN, YELLOW, RED
