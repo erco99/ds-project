@@ -75,13 +75,6 @@ public class MapPanel extends JPanel {
             street.getSecondSide().paint(g2);
         }
 
-        for (Street street : prova) {
-            g2.setColor(Color.BLUE);
-            street.getRightWay().paint(g2);
-            g2.setColor(Color.CYAN);
-            street.getLeftWay().paint(g2);
-        }
-
         for (Polygon intersection : streetMap.getStreetSidesIntersections()) {
             g2.setColor(g2.getBackground());
             g2.drawPolygon(intersection);

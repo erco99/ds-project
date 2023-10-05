@@ -1,5 +1,6 @@
 package fe.app.view;
 
+import fe.app.controller.Controller;
 import fe.app.model.elements.StreetMap;
 
 import javax.swing.*;
@@ -7,10 +8,13 @@ import java.awt.*;
 
 public class View {
 
-    MapPanel mapPanel;
-    ControlsPanel controlsPanel;
-
+    private MapPanel mapPanel;
+    private ControlsPanel controlsPanel;
+    private Controller controller;
     static JFrame frame;
+
+    public View() {
+    }
 
     public void start(StreetMap streetMap) {
         frame = new JFrame("App");
@@ -19,7 +23,7 @@ public class View {
         mapPanel = new MapPanel(streetMap);
         frame.add(mapPanel, BorderLayout.CENTER);
 
-        controlsPanel = new ControlsPanel();
+        controlsPanel = new ControlsPanel(this.controller);
         frame.add(controlsPanel, BorderLayout.EAST);
 
         frame.pack();
@@ -32,4 +36,7 @@ public class View {
         return mapPanel;
     }
 
+    public void getController(Controller controller) {
+        this.controller = controller;
+    }
 }

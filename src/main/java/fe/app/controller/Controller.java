@@ -7,21 +7,26 @@ import fe.app.view.View;
 
 public class Controller {
 
-    View view;
+    private final View view;
+    private StreetMap streetMap;
+    private MapContext mapContext;
 
     public Controller(View view) {
         this.view = view;
     }
 
     public void start() {
-        StreetMap streetMap = new StreetMap();
-        MapContext mapContext = new MapContext(streetMap);
+        this.streetMap = new StreetMap();
+        mapContext = new MapContext(streetMap);
 
         view.start(streetMap);
         VehicleViewer vehicleViewer = new VehicleViewer(view.getMapPanel(), mapContext);
         vehicleViewer.start();
 
+        mapContext.addVehicle();
+    }
 
+    public void addVehicle() {
         mapContext.addVehicle();
     }
 }
