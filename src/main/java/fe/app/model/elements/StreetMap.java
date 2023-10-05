@@ -33,7 +33,7 @@ public class StreetMap {
         }
         distance = 0;
         for(int i = 0; i < VERTICAL_STREETS_NUMBER; i++) {
-            int newX = random.nextInt(200,400);
+            int newX = random.nextInt(300,500);
             this.verticalStreets.add(new Street("v"+i, 1200, 1000, new Pair<>(newX + distance, 0)));
             distance += newX;
         }
@@ -109,6 +109,16 @@ public class StreetMap {
             for (WaysIntersection waysIntersection : streetsIntersection.getIntersectionWays())
                 if (Pair.equals(waysIntersection.getPoint(), point)) {
                     return waysIntersection;
+                }
+        }
+        return null;
+    }
+
+    public StreetsIntersection getStreetsIntersectionByPoint(Pair<Integer,Integer> point) {
+        for (StreetsIntersection streetsIntersection : this.streetsIntersections) {
+            for (WaysIntersection waysIntersection : streetsIntersection.getIntersectionWays())
+                if (Pair.equals(waysIntersection.getPoint(), point)) {
+                    return streetsIntersection;
                 }
         }
         return null;
