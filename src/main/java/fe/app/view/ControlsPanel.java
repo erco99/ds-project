@@ -12,11 +12,13 @@ public class ControlsPanel extends JPanel implements ActionListener {
 
     private final JButton addVehicleButton;
     private final Controller controller;
+    private Dimension panelDimension;
 
-    public ControlsPanel(Controller controller) {
+    public ControlsPanel(Controller controller, Dimension dimension) {
         this.controller = controller;
-        this.setPreferredSize(new Dimension(400,400));
+        this.panelDimension = dimension;
 
+        this.setPreferredSize(dimension);
         this.setBorder( new MatteBorder(0,1,0,0, Color.BLACK));
 
         this.addVehicleButton = new JButton("add vehicle");

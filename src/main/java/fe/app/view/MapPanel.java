@@ -1,5 +1,6 @@
 package fe.app.view;
 
+import fe.app.model.elements.semaphore.Semaphore;
 import fe.app.model.elements.street.Street;
 import fe.app.model.elements.map.StreetMap;
 import fe.app.model.elements.vehicle.Vehicle;
@@ -13,16 +14,16 @@ public class MapPanel extends JPanel {
 
     public static final int VEHICLE_WIDTH = 20;
     public static final int VEHICLE_HEIGHT = 10;
-    private static final int WIDTH_DIMENSION = 1200;
-    private static final int HEIGHT_DIMENSION = 1000;
+    private Dimension panelDimension;
     private int streetAngle;
     private ArrayList<Vehicle> vehicles;
     private StreetMap streetMap;
 
-    public MapPanel(StreetMap streetMap) {
+    public MapPanel(StreetMap streetMap, Dimension dimension) {
         this.streetMap = streetMap;
+        this.panelDimension = dimension;
         streetMap.create();
-        this.setPreferredSize(new Dimension(WIDTH_DIMENSION,HEIGHT_DIMENSION));
+        this.setPreferredSize(dimension);
     }
 
     public void paintComponent(Graphics g) {
@@ -77,6 +78,18 @@ public class MapPanel extends JPanel {
         for (Polygon intersection : streetMap.getStreetSidesIntersections()) {
             g2.setColor(g2.getBackground());
             g2.drawPolygon(intersection);
+        }
+
+        for (Semaphore semaphore : streetMap.getSemaphores()) {
+            g2.setColor(Color.RED);
+            g2.drawLine(semaphore.getFirstSidePosition().getX(),
+                    semaphore.getFirstSidePosition().getY(),
+                    semaphore.getFirstSidePosition().getX() + 1,
+                    semaphore.getFirstSidePosition().getY() + 1);
+            g2.drawLine(semaphore.getSecondSidePosition().getX(),
+                    semaphore.getSecondSidePosition().getY(),
+                    semaphore.getSecondSidePosition().getX() + 1,
+                    semaphore.getSecondSidePosition().getY() + 1);
         }
     }
 }
