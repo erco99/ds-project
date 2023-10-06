@@ -40,13 +40,13 @@ public class StreetMap {
         int distance = 0;
         for(int i = 0; i < HORIZONTAL_STREETS_NUMBER; i++) {
             int newY = random.nextInt(100, 220);
-            this.horizontalStreets.add(new Street("h"+i, 1200, 1000, new Pair<>(0, newY+distance)));
+            this.horizontalStreets.add(new Street("h"+i, MapDimension.MAP_WIDTH, MapDimension.MAP_HEIGHT, new Pair<>(0, newY+distance)));
             distance += newY;
         }
         distance = 0;
         for(int i = 0; i < VERTICAL_STREETS_NUMBER; i++) {
             int newX = random.nextInt(200,400);
-            this.verticalStreets.add(new Street("v"+i, 1200, 1000, new Pair<>(newX + distance, 0)));
+            this.verticalStreets.add(new Street("v"+i, MapDimension.MAP_WIDTH, MapDimension.MAP_HEIGHT, new Pair<>(newX + distance, 0)));
             distance += newX;
         }
 

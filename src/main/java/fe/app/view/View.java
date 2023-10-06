@@ -1,6 +1,7 @@
 package fe.app.view;
 
 import fe.app.controller.Controller;
+import fe.app.model.elements.map.MapDimension;
 import fe.app.model.elements.map.StreetMap;
 
 import javax.swing.*;
@@ -12,8 +13,6 @@ public class View {
     private ControlsPanel controlsPanel;
     private Controller controller;
     private static final int CONTROLS_PANEL_WIDTH = 200;
-    private static final int WINDOW_WIDTH = 1200;
-    private static final int WINDOW_HEIGHT = 600;
     static JFrame frame;
 
     public View() {
@@ -23,10 +22,10 @@ public class View {
         frame = new JFrame("App");
         frame.setLayout(new BorderLayout());
 
-        mapPanel = new MapPanel(streetMap, new Dimension(WINDOW_WIDTH-CONTROLS_PANEL_WIDTH, WINDOW_HEIGHT));
+        mapPanel = new MapPanel(streetMap, new Dimension(MapDimension.MAP_WIDTH, MapDimension.MAP_HEIGHT));
         frame.add(mapPanel, BorderLayout.CENTER);
 
-        controlsPanel = new ControlsPanel(this.controller, new Dimension(CONTROLS_PANEL_WIDTH, WINDOW_HEIGHT));
+        controlsPanel = new ControlsPanel(this.controller, new Dimension(CONTROLS_PANEL_WIDTH, MapDimension.MAP_HEIGHT));
         frame.add(controlsPanel, BorderLayout.EAST);
 
         frame.pack();
