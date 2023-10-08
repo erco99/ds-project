@@ -19,7 +19,7 @@ public class StreetMap {
 
     private static final int HORIZONTAL_STREETS_NUMBER = 3;
     private static final int VERTICAL_STREETS_NUMBER = 2;
-    public static final int SEMAPHORE_DISTANCE = 20;
+    public static final int SEMAPHORE_DISTANCE = 30;
     private final Random random = new Random();
     private final ArrayList<Street> horizontalStreets;
     private final ArrayList<Street> verticalStreets;
@@ -95,23 +95,21 @@ public class StreetMap {
         int semaphoreCounter = -1;
         for (StreetsIntersection streetsIntersection : this.streetsIntersections) {
             for (WaysIntersection waysIntersection : streetsIntersection.getIntersectionWays()) {
-                String streetId = waysIntersection.getFirstWay().getStreetID();
-                String streetType = this.getStreetById(streetId).getType();
                 if ((Objects.equals(waysIntersection.getFirstWay().getDirection(), "right") &&
-                        Objects.equals(waysIntersection.getSecondWay().getDirection(), "right")) ||
-                        (Objects.equals(waysIntersection.getSecondWay().getDirection(), "right") &&
-                                Objects.equals(waysIntersection.getFirstWay().getDirection(), "right")) ) {
-                        Pair<Integer,Integer> point = waysIntersection.getPoint();
-                        this.semaphores.add(new Semaphore(SemaphoreState.RED,
-                                new Pair<>(point.getX() - SEMAPHORE_DISTANCE, point.getY()),
-                                new Pair<>(point.getX() + Street.STREET_SIDE_DISTANCE + SEMAPHORE_DISTANCE,
-                                        point.getY() - Street.STREET_SIDE_DISTANCE),
-                                "S" + semaphoreCounter++));
-                        this.semaphores.add(new Semaphore(SemaphoreState.RED,
-                                new Pair<>(point.getX(), point.getY() - SEMAPHORE_DISTANCE - Street.STREET_SIDE_DISTANCE),
-                                new Pair<>(point.getX() + Street.STREET_SIDE_DISTANCE,
-                                        point.getY() + SEMAPHORE_DISTANCE),
-                                "S" + semaphoreCounter++));
+                    Objects.equals(waysIntersection.getSecondWay().getDirection(), "right")) ||
+                    (Objects.equals(waysIntersection.getSecondWay().getDirection(), "right") &&
+                            Objects.equals(waysIntersection.getFirstWay().getDirection(), "right")) ) {
+                    Pair<Integer,Integer> point = waysIntersection.getPoint();
+                    this.semaphores.add(new Semaphore(SemaphoreState.RED,
+                            new Pair<>(point.getX() - SEMAPHORE_DISTANCE, point.getY()),
+                            new Pair<>(point.getX() + Street.STREET_SIDE_DISTANCE + SEMAPHORE_DISTANCE,
+                                    point.getY() - Street.STREET_SIDE_DISTANCE),
+                            "S" + semaphoreCounter++));
+                    this.semaphores.add(new Semaphore(SemaphoreState.RED,
+                            new Pair<>(point.getX(), point.getY() - SEMAPHORE_DISTANCE - Street.STREET_SIDE_DISTANCE),
+                            new Pair<>(point.getX() + Street.STREET_SIDE_DISTANCE,
+                                    point.getY() + SEMAPHORE_DISTANCE),
+                            "S" + semaphoreCounter++));
                 }
             }
         }
@@ -179,6 +177,14 @@ public class StreetMap {
         return null;
     }
 
+    public Semaphore getSemaphoreByPoint (Pair<Integer,Integer> point) {
+        for (Semaphore semaphore : this.semaphores) {
+            if (semaphore.getPositions().contains(point)) {
+                return semaphore;
+            }
+        }
+        return null;
+    }
     public Street getRandomStreet() {
         ArrayList<Street> allStreets = new ArrayList<>(this.horizontalStreets);
         allStreets.addAll(this.verticalStreets);

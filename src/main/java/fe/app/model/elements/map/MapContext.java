@@ -1,6 +1,7 @@
 package fe.app.model.elements.map;
 
 import fe.app.model.elements.vehicle.Vehicle;
+import fe.app.util.Pair;
 
 import java.util.ArrayList;
 
@@ -20,7 +21,22 @@ public class MapContext {
         agent.start();
     }
 
+    public synchronized void stopVehicles() {
+        this.vehicles.forEach(Vehicle::block);
+    }
+
     public ArrayList<Vehicle> getVehicles() {
         return this.vehicles;
+    }
+
+    public ArrayList<Pair<Double, Double>> getAllPositions() {
+        ArrayList<Pair<Double, Double>> positions = new ArrayList<>();
+        for (Vehicle vehicle : this.vehicles) {
+            double x = (double)Math.round(vehicle.getPosition().getX());
+            double y= (double)Math.round(vehicle.getPosition().getY());
+            positions.add(new Pair<>(x,y));
+        }
+
+        return positions;
     }
 }

@@ -2,6 +2,10 @@ package fe.app.model.elements.semaphore;
 
 import fe.app.util.Pair;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
 public class Semaphore {
 
     private SemaphoreState state;
@@ -33,5 +37,11 @@ public class Semaphore {
 
     public String getId() {
         return id;
+    }
+
+    public ArrayList<Pair<Integer,Integer>> getPositions() {
+        ArrayList<Pair<Integer,Integer>> positions = new ArrayList<>();
+        Collections.addAll(positions, this.firstSidePosition, this.secondSidePosition);
+        return positions;
     }
 }

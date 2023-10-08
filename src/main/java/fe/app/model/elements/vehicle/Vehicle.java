@@ -4,6 +4,7 @@ import fe.app.model.elements.intersection.StreetsIntersection;
 import fe.app.model.elements.intersection.WaysIntersection;
 import fe.app.model.elements.map.MapContext;
 import fe.app.model.elements.map.StreetMap;
+import fe.app.model.elements.semaphore.SemaphoreState;
 import fe.app.model.elements.street.DirectionLine;
 import fe.app.model.elements.street.Street;
 import fe.app.util.Pair;
@@ -15,8 +16,10 @@ import java.util.Random;
 
 public class Vehicle extends Thread {
 
+    public static final double SAFETY_DISTANCE = 30;
     public double vehicleSpeed = 0.20;
     private Pair<Double,Double> position;
+    private boolean terminate;
     private boolean stop;
     private MapContext mapContext;
     private StreetMap streetMap;
@@ -28,6 +31,7 @@ public class Vehicle extends Thread {
     private int yCoef = 0;
     private int direction = 1;
     private ArrayList<Pair<Integer,Integer>> intersectionPoints = new ArrayList<>();
+    private ArrayList<Pair<Integer,Integer>> semaphorePoints = new ArrayList<>();
     private Random random = new Random();
     private DirectionLine streetWay;
 
@@ -38,6 +42,10 @@ public class Vehicle extends Thread {
 
         this.streetMap.getIntersections().forEach(streetsIntersection ->
                 this.intersectionPoints.addAll(streetsIntersection.getAllPoints()));
+
+        this.streetMap.getSemaphores().forEach(semaphore -> {
+            this.semaphorePoints.addAll(semaphore.getPositions());
+        });
 
         setAngle();
 
@@ -53,14 +61,16 @@ public class Vehicle extends Thread {
         }
 
         this.position = new Pair<>(Double.valueOf(streetStartingPoint.getX()), Double.valueOf(streetStartingPoint.getY()));
-        this.stop = false;
+        this.terminate = false;
     }
 
     public void run() {
         //log("INIT: vel "+vel+"speed "+speed);
         try {
-            while (!this.stop){
-                updatePosition();
+            while (!this.terminate){
+                if (!this.stop) {
+                    updatePosition();
+                }
                 // log("pos updated: "+pos);
                 Thread.sleep(5);
             }
@@ -69,13 +79,16 @@ public class Vehicle extends Thread {
         }
     }
 
-    public void terminate() {
-        this.stop = true;
-    }
-
     private void updatePosition() {
         this.position = new Pair<>(this.position.getX() + vehicleSpeed * xCoef * direction ,
                 this.position.getY() + vehicleSpeed * yCoef * direction);
+
+        if (this.semaphorePoints.contains(Pair.toInteger(this.position)) &&
+            this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getState() == SemaphoreState.RED) {
+            this.stop = true;
+        }
+
+        checkFront();
 
         if (isInIntersection(this.position)) {
             changeStreet(new Pair<>((int) Math.round(this.position.getX()), (int) Math.round(this.position.getY())));
@@ -139,10 +152,6 @@ public class Vehicle extends Thread {
         setAngle();
     }
 
-    private void changeIfIllegal() {
-
-    }
-
     private void setAngle() {
         if (Objects.equals(this.street.getType(), StreetType.HORIZONTAL.name())) {
             this.yCoef = 0;
@@ -162,6 +171,25 @@ public class Vehicle extends Thread {
         return false;
     }
 
+    private void checkFront() {
+        Pair<Double,Double> prova = new Pair<>(this.position.getX() + (vehicleSpeed + SAFETY_DISTANCE) * xCoef * direction,
+                this.position.getY() + (vehicleSpeed + SAFETY_DISTANCE) * yCoef * direction);
+        double x = (double)Math.round(prova.getX());
+        double y= (double)Math.round(prova.getY());
+
+        if (this.mapContext.getAllPositions().contains(new Pair<>(x,y))) {
+            System.out.println("stop");
+            this.stop = true;
+        }
+    }
+
+    public void terminate() {
+        this.terminate = true;
+    }
+
+    public void block() {
+        this.stop = true;
+    }
 
     public Pair<Double, Double> getPosition() {
         return this.position;
