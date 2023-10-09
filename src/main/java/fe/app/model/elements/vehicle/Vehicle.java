@@ -68,6 +68,7 @@ public class Vehicle extends Thread {
         //log("INIT: vel "+vel+"speed "+speed);
         try {
             while (!this.terminate){
+                checkIfGo();
                 if (!this.stop) {
                     updatePosition();
                 }
@@ -83,15 +84,27 @@ public class Vehicle extends Thread {
         this.position = new Pair<>(this.position.getX() + vehicleSpeed * xCoef * direction ,
                 this.position.getY() + vehicleSpeed * yCoef * direction);
 
-        if (this.semaphorePoints.contains(Pair.toInteger(this.position)) &&
-            this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getState() == SemaphoreState.RED) {
-            this.stop = true;
-        }
-
-        checkFront();
+        //checkFront();
 
         if (isInIntersection(this.position)) {
             changeStreet(new Pair<>((int) Math.round(this.position.getX()), (int) Math.round(this.position.getY())));
+        }
+    }
+
+    private void checkIfGo() {
+        if (this.semaphorePoints.contains(Pair.toInteger(this.position)) &&
+                this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getState() == SemaphoreState.RED) {
+            this.stop = true;
+        } else if (this.semaphorePoints.contains(Pair.toInteger(this.position)) &&
+                this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getState() == SemaphoreState.GREEN) {
+            this.stop = false;
+        } else {
+            Pair<Double,Double> prova = new Pair<>(this.position.getX() + (vehicleSpeed + SAFETY_DISTANCE) * xCoef * direction,
+                    this.position.getY() + (vehicleSpeed + SAFETY_DISTANCE) * yCoef * direction);
+            double x = (double)Math.round(prova.getX());
+            double y= (double)Math.round(prova.getY());
+
+            this.stop = this.mapContext.getAllPositions().contains(new Pair<>(x, y));
         }
     }
 

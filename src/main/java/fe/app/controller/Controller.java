@@ -29,4 +29,8 @@ public class Controller {
     public void addVehicle() {
         mapContext.addVehicle();
     }
+
+    public void turnGreen() {
+        streetMap.turnGreen();
+    }
 }

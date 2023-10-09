@@ -1,6 +1,7 @@
 package fe.app.view;
 
 import fe.app.model.elements.semaphore.Semaphore;
+import fe.app.model.elements.semaphore.SemaphoreState;
 import fe.app.model.elements.street.Street;
 import fe.app.model.elements.map.StreetMap;
 import fe.app.model.elements.vehicle.Vehicle;
@@ -81,7 +82,9 @@ public class MapPanel extends JPanel {
         }
 
         for (Semaphore semaphore : streetMap.getSemaphores()) {
-            g2.setColor(Color.RED);
+            if (semaphore.getState() == SemaphoreState.RED) g2.setColor(Color.RED);
+            if (semaphore.getState() == SemaphoreState.GREEN) g2.setColor(Color.GREEN);
+
             g2.drawLine(semaphore.getFirstSidePosition().getX(),
                     semaphore.getFirstSidePosition().getY(),
                     semaphore.getFirstSidePosition().getX() + 1,

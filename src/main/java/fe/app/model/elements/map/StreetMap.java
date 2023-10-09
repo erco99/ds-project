@@ -190,4 +190,10 @@ public class StreetMap {
         allStreets.addAll(this.verticalStreets);
         return allStreets.get(random.nextInt(0, allStreets.size()));
     }
+
+    public void turnGreen() {
+        for (Semaphore semaphore : this.semaphores) {
+            semaphore.setState(SemaphoreState.GREEN);
+        }
+    }
 }

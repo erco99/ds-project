@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 public class ControlsPanel extends JPanel implements ActionListener {
 
     private final JButton addVehicleButton;
+    private final JButton turnGreenButton;
+
     private final Controller controller;
     private Dimension panelDimension;
 
@@ -24,12 +26,19 @@ public class ControlsPanel extends JPanel implements ActionListener {
         this.addVehicleButton = new JButton("add vehicle");
         this.add(addVehicleButton);
         this.addVehicleButton.addActionListener(this);
+
+        this.turnGreenButton = new JButton("turn green");
+        this.add(turnGreenButton);
+        this.turnGreenButton.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.addVehicleButton) {
             this.controller.addVehicle();
+        }
+        if (e.getSource() == this.turnGreenButton) {
+            this.controller.turnGreen();
         }
     }
 }

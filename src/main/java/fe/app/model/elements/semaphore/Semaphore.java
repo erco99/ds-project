@@ -23,6 +23,10 @@ public class Semaphore {
         this.id = id;
     }
 
+    public void setState(SemaphoreState state) {
+        this.state = state;
+    }
+
     public SemaphoreState getState() {
         return state;
     }
