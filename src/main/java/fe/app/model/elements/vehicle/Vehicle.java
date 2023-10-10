@@ -17,10 +17,12 @@ import java.util.Random;
 public class Vehicle extends Thread {
 
     public static final double SAFETY_DISTANCE = 30;
-    public double vehicleSpeed = 0.20;
+    public static final int RESTART_TIME = 500;
+    public double vehicleSpeed = 0.25;
     private Pair<Double,Double> position;
     private boolean terminate;
     private boolean stop;
+    private boolean behind = false;
     private MapContext mapContext;
     private StreetMap streetMap;
     private Street street;
@@ -91,7 +93,7 @@ public class Vehicle extends Thread {
         }
     }
 
-    private void checkIfGo() {
+    private void checkIfGo() throws InterruptedException {
         if (this.semaphorePoints.contains(Pair.toInteger(this.position)) &&
                 this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getState() == SemaphoreState.RED) {
             this.stop = true;
@@ -104,7 +106,16 @@ public class Vehicle extends Thread {
             double x = (double)Math.round(prova.getX());
             double y= (double)Math.round(prova.getY());
 
-            this.stop = this.mapContext.getAllPositions().contains(new Pair<>(x, y));
+            if (this.mapContext.getAllPositions().contains(new Pair<>(x, y))) {
+                this.stop = true;
+                this.behind = true;
+            } else if (this.behind){
+                this.stop = false;
+                this.behind = false;
+                Thread.sleep(RESTART_TIME);
+            } else {
+                this.stop = false;
+            }
         }
     }
 
