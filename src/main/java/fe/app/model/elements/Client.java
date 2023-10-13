@@ -1,6 +1,7 @@
 package fe.app.model.elements;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -19,8 +20,19 @@ public class Client {
         client.listen();
     }
 
-    private void listen() {
-        System.out.println("eccomi");
+    private void listen() throws IOException {
+        byte[] buffer = new byte[1024];
+
+        try {
+            InputStream inputStream = socket.getInputStream ();
+            while (true) {
+                int readBytes = inputStream.read(buffer);
+                System.out.println(readBytes);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("eccomi" + socket.getInputStream().read());
     }
 
 

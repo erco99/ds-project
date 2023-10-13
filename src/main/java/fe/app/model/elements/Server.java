@@ -19,12 +19,19 @@ public class Server {
         server.startServer();
     }
 
-    public void startServer() {
+    public void startServer() throws IOException {
         try {
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
+
                 System.out.printf("Accepted connection from: %s, on local port %d\n",
                         socket.getRemoteSocketAddress(), PORT);
+                System.out.println("dskdsdsds");
+                var buffer = new byte[1024];
+                int readBytes = System.in.read(buffer);
+
+                socket.getOutputStream().write(buffer,0,readBytes);
+                socket.getOutputStream().flush();
             }
         } catch (IOException e) {
             e.printStackTrace();
