@@ -1,6 +1,7 @@
 package fe.app.view;
 
 import fe.app.controller.Controller;
+import fe.app.controller.NetworkController;
 import fe.app.model.elements.map.MapDimension;
 import fe.app.model.elements.map.StreetMap;
 
@@ -12,6 +13,7 @@ public class View {
     private MapPanel mapPanel;
     private ControlsPanel controlsPanel;
     private Controller controller;
+    private NetworkController networkController;
     private static final int CONTROLS_PANEL_WIDTH = 200;
     static JFrame frame;
 
@@ -40,5 +42,9 @@ public class View {
 
     public void getController(Controller controller) {
         this.controller = controller;
+    }
+
+    public void getNetworkController(NetworkController networkController) {
+        this.networkController = networkController;
     }
 }
