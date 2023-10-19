@@ -1,17 +1,22 @@
-package fe.app.model.elements.semaphore;
+package fe.app.model.elements.semaphore_management.semaphore;
 
+import fe.app.model.elements.Client;
 import fe.app.util.Pair;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
-public class Semaphore {
+public class Semaphore extends Thread {
 
     private SemaphoreState state;
     private Pair<Integer,Integer> firstSidePosition;
     private Pair<Integer,Integer> secondSidePosition;
     private String id;
+    private Socket socket;
+    public static final int PORT = 2000;
 
     public Semaphore(SemaphoreState state,
                      Pair<Integer, Integer> firstSidePosition,
@@ -23,11 +28,20 @@ public class Semaphore {
         this.id = id;
     }
 
-    public void setState(SemaphoreState state) {
+    public void run() {
+        try {
+            this.socket = new Socket("localhost", PORT);
+            System.out.println("eccomi" + socket.getInputStream().read());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setCurrentState(SemaphoreState state) {
         this.state = state;
     }
 
-    public SemaphoreState getState() {
+    public SemaphoreState getCurrentState() {
         return state;
     }
 
@@ -39,7 +53,7 @@ public class Semaphore {
         return secondSidePosition;
     }
 
-    public String getId() {
+    public String getID() {
         return id;
     }
 
