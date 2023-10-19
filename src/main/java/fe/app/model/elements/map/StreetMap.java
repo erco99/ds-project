@@ -2,8 +2,8 @@ package fe.app.model.elements.map;
 
 import fe.app.model.elements.intersection.StreetsIntersection;
 import fe.app.model.elements.intersection.WaysIntersection;
-import fe.app.model.elements.semaphore.Semaphore;
-import fe.app.model.elements.semaphore.SemaphoreState;
+import fe.app.model.tfmanagement.semaphore.Semaphore;
+import fe.app.model.tfmanagement.semaphore.SemaphoreState;
 import fe.app.model.elements.street.DirectionLine;
 import fe.app.model.elements.street.Line;
 import fe.app.model.elements.street.Street;
@@ -100,16 +100,23 @@ public class StreetMap {
                     (Objects.equals(waysIntersection.getSecondWay().getDirection(), "right") &&
                             Objects.equals(waysIntersection.getFirstWay().getDirection(), "right")) ) {
                     Pair<Integer,Integer> point = waysIntersection.getPoint();
-                    this.semaphores.add(new Semaphore(SemaphoreState.RED,
+
+                    Semaphore semaphoreOne = new Semaphore(SemaphoreState.RED,
                             new Pair<>(point.getX() - SEMAPHORE_DISTANCE, point.getY()),
                             new Pair<>(point.getX() + Street.STREET_SIDE_DISTANCE + SEMAPHORE_DISTANCE,
                                     point.getY() - Street.STREET_SIDE_DISTANCE),
-                            "S" + semaphoreCounter++));
-                    this.semaphores.add(new Semaphore(SemaphoreState.RED,
+                            "S" + semaphoreCounter++);
+                    Semaphore semaphoreTwo = new Semaphore(SemaphoreState.RED,
                             new Pair<>(point.getX(), point.getY() - SEMAPHORE_DISTANCE - Street.STREET_SIDE_DISTANCE),
                             new Pair<>(point.getX() + Street.STREET_SIDE_DISTANCE,
                                     point.getY() + SEMAPHORE_DISTANCE),
-                            "S" + semaphoreCounter++));
+                            "S" + semaphoreCounter++);
+
+                    this.semaphores.add(semaphoreOne);
+                    this.semaphores.add(semaphoreTwo);
+
+                    semaphoreOne.start();
+                    semaphoreTwo.start();
                 }
             }
         }
@@ -193,7 +200,7 @@ public class StreetMap {
 
     public void turnGreen() {
         for (Semaphore semaphore : this.semaphores) {
-            semaphore.setState(SemaphoreState.GREEN);
+            semaphore.setCurrentState(SemaphoreState.GREEN);
         }
     }
 }

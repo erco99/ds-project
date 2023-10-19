@@ -1,10 +1,8 @@
-package fe.app.model.elements.semaphore_management.semaphore;
+package fe.app.model.tfmanagement.semaphore;
 
-import fe.app.model.elements.Client;
 import fe.app.util.Pair;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;

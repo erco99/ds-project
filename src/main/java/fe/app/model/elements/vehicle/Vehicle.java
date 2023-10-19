@@ -4,7 +4,7 @@ import fe.app.model.elements.intersection.StreetsIntersection;
 import fe.app.model.elements.intersection.WaysIntersection;
 import fe.app.model.elements.map.MapContext;
 import fe.app.model.elements.map.StreetMap;
-import fe.app.model.elements.semaphore.SemaphoreState;
+import fe.app.model.tfmanagement.semaphore.SemaphoreState;
 import fe.app.model.elements.street.DirectionLine;
 import fe.app.model.elements.street.Street;
 import fe.app.util.Pair;
@@ -95,10 +95,10 @@ public class Vehicle extends Thread {
 
     private void checkIfGo() throws InterruptedException {
         if (this.semaphorePoints.contains(Pair.toInteger(this.position)) &&
-                this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getState() == SemaphoreState.RED) {
+                this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getCurrentState() == SemaphoreState.RED) {
             this.stop = true;
         } else if (this.semaphorePoints.contains(Pair.toInteger(this.position)) &&
-                this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getState() == SemaphoreState.GREEN) {
+                this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getCurrentState() == SemaphoreState.GREEN) {
             this.stop = false;
         } else {
             Pair<Double,Double> prova = new Pair<>(this.position.getX() + (vehicleSpeed + SAFETY_DISTANCE) * xCoef * direction,

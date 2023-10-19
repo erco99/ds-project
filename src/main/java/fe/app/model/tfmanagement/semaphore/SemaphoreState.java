@@ -1,4 +1,4 @@
-package fe.app.model.elements.semaphore_management.semaphore;
+package fe.app.model.tfmanagement.semaphore;
 
 public enum SemaphoreState {
     GREEN, YELLOW, RED

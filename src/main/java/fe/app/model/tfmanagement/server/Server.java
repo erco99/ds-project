@@ -1,4 +1,4 @@
-package fe.app.model.tfmanagement;
+package fe.app.model.tfmanagement.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
