@@ -42,6 +42,7 @@ public class Server {
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
                 ServerHandler serverHandler = new ServerHandler(socket);
+                serverHandler.start();
                 System.out.printf("Accepted connection from: %s, on local port %d\n",
                         socket.getRemoteSocketAddress(), PORT);
             }
