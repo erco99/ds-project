@@ -9,6 +9,7 @@ import fe.app.util.GsonUtils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Objects;
 
@@ -26,6 +27,8 @@ public class ServerHandler extends Thread {
     public void run() {
         try (socket) {
             var request = unmarshallRequest(socket);
+            var response = computeResponse(request);
+            marshallResponse(socket, response);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,8 +44,6 @@ public class ServerHandler extends Thread {
     }
 
     private Response<?> computeResponse(Request<?> request) {
-        String req = gson.toJson(request);
-
         try {
             switch (request.getMethod()) {
                 case "status":
@@ -51,7 +52,18 @@ public class ServerHandler extends Thread {
                     return new Response<>();
             }
         } catch (Exception e) {
-            return null;
+            return new Response<>(ServerStatus.SERVER_ERROR, e.getMessage());
         }
     }
+
+    private void marshallResponse(Socket socket, Response<?> response) throws IOException {
+        try {
+            OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
+            gson.toJson(response, writer);
+            writer.flush();
+        } finally {
+            socket.shutdownOutput();
+        }
+    }
+
 }
