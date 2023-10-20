@@ -40,6 +40,10 @@ public class View {
         return mapPanel;
     }
 
+    public ControlsPanel getControlsPanel() {
+        return controlsPanel;
+    }
+
     public void getController(Controller controller) {
         this.controller = controller;
     }

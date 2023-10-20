@@ -12,6 +12,7 @@ public class ControlsPanel extends JPanel implements ActionListener {
 
     private final JButton addVehicleButton;
     private final JButton turnGreenButton;
+    private final JButton serverStatusButton;
 
     private final Controller controller;
     private Dimension panelDimension;
@@ -30,6 +31,10 @@ public class ControlsPanel extends JPanel implements ActionListener {
         this.turnGreenButton = new JButton("turn green");
         this.add(turnGreenButton);
         this.turnGreenButton.addActionListener(this);
+
+        this.serverStatusButton = new JButton("Server");
+        this.add(serverStatusButton);
+        this.serverStatusButton.addActionListener(this);
     }
 
     @Override
@@ -39,6 +44,14 @@ public class ControlsPanel extends JPanel implements ActionListener {
         }
         if (e.getSource() == this.turnGreenButton) {
             this.controller.turnGreen();
+        }
+    }
+
+    public void changeServerStatus(boolean status) {
+        if (status) {
+            this.serverStatusButton.setBackground(Color.GREEN);
+        }  else {
+            this.serverStatusButton.setBackground(Color.RED);
         }
     }
 }

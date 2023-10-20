@@ -10,9 +10,11 @@ public class Main {
     public static void main(String[] args) {
         View view = new View();
         Controller controller = new Controller(view);
-        NetworkController networkController = new NetworkController(view);
 
         view.getController(controller);
+
+        controller.start();
+        NetworkController networkController = new NetworkController(view);
         view.getNetworkController(networkController);
 
         try {
@@ -20,6 +22,5 @@ public class Main {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        controller.start();
     }
 }
