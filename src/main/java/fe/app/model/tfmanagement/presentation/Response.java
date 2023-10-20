@@ -4,9 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
-
 public class Response<T> {
-
     @Expose
     @SerializedName("status")
     private ServerStatus status;
@@ -15,12 +13,21 @@ public class Response<T> {
     @SerializedName("message")
     private String message;
 
+    @Expose
+    @SerializedName("result")
+    private T result;
+
     public Response() {
     }
 
     public Response(ServerStatus status, String message) {
+        this(status, message, null);
+    }
+
+    public Response(ServerStatus status, String message, T result) {
         this.status = status;
         this.message = message;
+        this.result = result;
     }
 
     @Override
@@ -28,12 +35,12 @@ public class Response<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Response<?> response = (Response<?>) o;
-        return status == response.status && Objects.equals(message, response.message);
+        return status == response.status && Objects.equals(message, response.message) && Objects.equals(result, response.result);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(status, message);
+        return Objects.hash(status, message, result);
     }
 
     public ServerStatus getStatus() {
@@ -43,4 +50,9 @@ public class Response<T> {
     public String getMessage() {
         return message;
     }
+
+    public T getResult() {
+        return result;
+    }
 }
+

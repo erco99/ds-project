@@ -1,8 +1,9 @@
 package fe.app.model.tfmanagement.presentation;
 
-public class ServerStatusRequest extends Request<ServerStatus> {
+public class ServerStatusRequest extends Request<Void> {
 
-    public ServerStatusRequest(ServerStatus argument) {
-        super("status", argument);
+    public ServerStatusRequest() {
+        super("status", null);
     }
+
 }
