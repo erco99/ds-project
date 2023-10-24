@@ -25,8 +25,8 @@ public class StreetMap {
     private final ArrayList<Street> verticalStreets;
     private final ArrayList<Polygon> streetSidesIntersections;
     private final ArrayList<StreetsIntersection> streetsIntersections;
-
     private ArrayList<Semaphore> semaphores;
+    private ArrayList<Sensor> sensors;
 
     public StreetMap() {
         this.horizontalStreets = new ArrayList<>();
@@ -112,8 +112,20 @@ public class StreetMap {
                                     point.getY() + SEMAPHORE_DISTANCE),
                             "S" + semaphoreCounter++);
 
+                    Sensor sensorHStreet = new Sensor(point.getX() - Sensor.DISTANCE_COVERED,
+                            point.getX() + Street.STREET_SIDE_DISTANCE + Sensor.DISTANCE_COVERED,
+                            semaphoreOne);
+
+                    Sensor sensorVStreet = new Sensor(point.getY() -
+                            Street.STREET_SIDE_DISTANCE - Sensor.DISTANCE_COVERED,
+                            point.getY() + Street.STREET_SIDE_DISTANCE,
+                            semaphoreTwo);
+
                     this.semaphores.add(semaphoreOne);
                     this.semaphores.add(semaphoreTwo);
+
+                    this.sensors.add(sensorHStreet);
+                    this.sensors.add(sensorVStreet);
 
                     semaphoreOne.start();
                     semaphoreTwo.start();
