@@ -16,8 +16,12 @@ public class Controller {
     }
 
     public void start() {
+
         this.streetMap = new StreetMap();
         mapContext = new MapContext(streetMap);
+
+        SensorsController sensorsController = new SensorsController(mapContext);
+        this.streetMap.getSensorsController(sensorsController);
 
         view.start(streetMap);
         VehicleViewer vehicleViewer = new VehicleViewer(view.getMapPanel(), mapContext);
