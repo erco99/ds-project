@@ -11,7 +11,7 @@ import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-public class NetworkController {
+public class NetworkController extends Thread {
 
     private final View view;
     private final Gson gson;
@@ -25,18 +25,16 @@ public class NetworkController {
         gson = GsonUtils.createGson();
     }
 
-    public void startConnection() throws IOException {
-        new Thread(() -> {
-            while (true) {
-                this.statusRequest();
-                System.out.println("mandata");
-                try {
-                    Thread.sleep(4000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+    public void run() {
+        while (true) {
+            this.statusRequest();
+            System.out.println("mandata");
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
-        }).start();
+        }
     }
 
 
