@@ -44,11 +44,11 @@ public class View {
         return controlsPanel;
     }
 
-    public void getController(Controller controller) {
+    public void setController(Controller controller) {
         this.controller = controller;
     }
 
-    public void getNetworkController(NetworkController networkController) {
+    public void setNetworkController(NetworkController networkController) {
         this.networkController = networkController;
     }
 }

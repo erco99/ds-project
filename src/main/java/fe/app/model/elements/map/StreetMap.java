@@ -135,7 +135,6 @@ public class StreetMap {
                 }
             }
         }
-        this.sensorsController.start();
     }
 
     private Pair<Integer,Integer> getIntersectionPoint(Line a, Line b) {
@@ -220,7 +219,7 @@ public class StreetMap {
         }
     }
 
-    public void getSensorsController(SensorsController sensorsController) {
+    public void setSensorsController(SensorsController sensorsController) {
         this.sensorsController = sensorsController;
     }
 }

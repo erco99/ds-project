@@ -1,6 +1,7 @@
 package fe.app.controller;
 
 import com.google.gson.Gson;
+import fe.app.model.elements.intersection.SensorsIntersection;
 import fe.app.model.tfmanagement.presentation.*;
 import fe.app.util.GsonUtils;
 import fe.app.view.View;
@@ -10,23 +11,27 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class NetworkController extends Thread {
 
     private final View view;
+    private final SensorsController sensorsController;
     private final Gson gson;
     private int PORT = 2000;
     private final InetSocketAddress socket;
     private boolean isServerUp = true;
 
-    public NetworkController(View view) {
+    public NetworkController(View view, SensorsController sensorsController) {
         this.view = view;
+        this.sensorsController = sensorsController;
         this.socket = new InetSocketAddress("localhost", PORT);
-        gson = GsonUtils.createGson();
+        this.gson = GsonUtils.createGson();
     }
 
     public void run() {
         while (true) {
+            print(sensorsController.getSensorsIntersections());
             this.statusRequest();
             System.out.println("mandata");
             try {
@@ -84,5 +89,11 @@ public class NetworkController extends Thread {
         }
     }
 
+    private void print(ArrayList<SensorsIntersection> sensorsIntersections) {
+        for (SensorsIntersection sensorIntersection : sensorsIntersections) {
+            System.out.println("horizontal " + sensorIntersection.getHorizontalStreetSensor().getVehiclesNumber());
+            System.out.println("vertical " + sensorIntersection.getVerticalStreetSensor().getVehiclesNumber());
 
+        }
+    }
 }

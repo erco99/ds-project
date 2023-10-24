@@ -7,27 +7,37 @@ import fe.app.view.View;
 
 public class Controller {
 
-    private final View view;
     private StreetMap streetMap;
     private MapContext mapContext;
+    private NetworkController networkController;
+    private SensorsController sensorsController;
+    private View view;
 
-    public Controller(View view) {
-        this.view = view;
+    public Controller() {
     }
 
     public void start() {
 
+        this.view = new View();
+
         this.streetMap = new StreetMap();
-        mapContext = new MapContext(streetMap);
+        this.mapContext = new MapContext(streetMap);
 
-        SensorsController sensorsController = new SensorsController(mapContext);
-        this.streetMap.getSensorsController(sensorsController);
+        this.sensorsController = new SensorsController(mapContext);
+        this.networkController = new NetworkController(view, sensorsController);
 
-        view.start(streetMap);
+        this.streetMap.setSensorsController(this.sensorsController);
+        this.view.setController(this);
+        this.view.setNetworkController(this.networkController);
+
+        this.view.start(streetMap);
+
         VehicleViewer vehicleViewer = new VehicleViewer(view.getMapPanel(), mapContext);
         vehicleViewer.start();
 
-        mapContext.addVehicle();
+        this.networkController.start();
+        this.sensorsController.start();
+
     }
 
     public void addVehicle() {

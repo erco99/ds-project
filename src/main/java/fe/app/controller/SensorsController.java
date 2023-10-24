@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class SensorsController extends Thread {
 
-    private MapContext mapContext;
+    private final MapContext mapContext;
     private ArrayList<SensorsIntersection> sensorsIntersections;
 
     public SensorsController(MapContext mapContext) {
@@ -45,7 +45,6 @@ public class SensorsController extends Thread {
                 vSensVehicles = 0;
                 hSensVehicles = 0;
             }
-            print();
             try {
                 sleep(3000);
             } catch (InterruptedException e) {
@@ -66,5 +65,9 @@ public class SensorsController extends Thread {
             System.out.println("vertical " + sensorIntersection.getVerticalStreetSensor().getVehiclesNumber());
 
         }
+    }
+
+    public ArrayList<SensorsIntersection> getSensorsIntersections() {
+        return sensorsIntersections;
     }
 }
