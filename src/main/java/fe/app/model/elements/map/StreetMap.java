@@ -1,5 +1,7 @@
 package fe.app.model.elements.map;
 
+import fe.app.controller.SensorsController;
+import fe.app.model.elements.intersection.SensorsIntersection;
 import fe.app.model.elements.intersection.StreetsIntersection;
 import fe.app.model.elements.intersection.WaysIntersection;
 import fe.app.model.tfmanagement.semaphore.Semaphore;
@@ -26,7 +28,7 @@ public class StreetMap {
     private final ArrayList<Polygon> streetSidesIntersections;
     private final ArrayList<StreetsIntersection> streetsIntersections;
     private ArrayList<Semaphore> semaphores;
-    private ArrayList<Sensor> sensors;
+    private SensorsController sensorsController;
 
     public StreetMap() {
         this.horizontalStreets = new ArrayList<>();
@@ -79,7 +81,7 @@ public class StreetMap {
                 intersectionWays.add(new WaysIntersection(getIntersectionPoint(hRightWay,vLeftWay),hRightWay,vLeftWay));
                 intersectionWays.add(new WaysIntersection(getIntersectionPoint(hRightWay,vRightWay),hRightWay,vRightWay));
 
-                this.streetsIntersections.add(new StreetsIntersection(intersectionWays, new Pair<>(hStreet,vStreet)));
+                this.streetsIntersections.add(new StreetsIntersection(intersectionWays, hStreet, vStreet));
 
                 Polygon p = new Polygon();
                 p.addPoint(point.getX(), point.getY());
@@ -114,24 +116,26 @@ public class StreetMap {
 
                     Sensor sensorHStreet = new Sensor(point.getX() - Sensor.DISTANCE_COVERED,
                             point.getX() + Street.STREET_SIDE_DISTANCE + Sensor.DISTANCE_COVERED,
-                            semaphoreOne);
+                            semaphoreOne,
+                            streetsIntersection.getHorizontalStreet());
 
                     Sensor sensorVStreet = new Sensor(point.getY() -
                             Street.STREET_SIDE_DISTANCE - Sensor.DISTANCE_COVERED,
-                            point.getY() + Street.STREET_SIDE_DISTANCE,
-                            semaphoreTwo);
+                            point.getY() + Sensor.DISTANCE_COVERED,
+                            semaphoreTwo,
+                            streetsIntersection.getVerticalStreet());
 
                     this.semaphores.add(semaphoreOne);
                     this.semaphores.add(semaphoreTwo);
 
-                    this.sensors.add(sensorHStreet);
-                    this.sensors.add(sensorVStreet);
+                    this.sensorsController.addSensorIntersection(new SensorsIntersection(sensorHStreet, sensorVStreet));
 
                     semaphoreOne.start();
                     semaphoreTwo.start();
                 }
             }
         }
+        this.sensorsController.start();
     }
 
     private Pair<Integer,Integer> getIntersectionPoint(Line a, Line b) {
@@ -214,5 +218,9 @@ public class StreetMap {
         for (Semaphore semaphore : this.semaphores) {
             semaphore.setCurrentState(SemaphoreState.GREEN);
         }
+    }
+
+    public void getSensorsController(SensorsController sensorsController) {
+        this.sensorsController = sensorsController;
     }
 }
