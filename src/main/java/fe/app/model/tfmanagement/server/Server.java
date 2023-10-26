@@ -9,6 +9,7 @@ public class Server {
     public static final int PORT = 2000;
     private ServerSocket serverSocket;
     private Socket socket;
+    private TimingProcessor timingProcessor = new TimingProcessor();
 
     public Server(ServerSocket serverSocket, Socket socket) {
         this.serverSocket = serverSocket;
@@ -41,7 +42,7 @@ public class Server {
         try {
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
-                ServerHandler serverHandler = new ServerHandler(socket);
+                ServerHandler serverHandler = new ServerHandler(socket, timingProcessor);
                 serverHandler.start();
                 System.out.printf("Accepted connection from: %s, on local port %d\n",
                         socket.getRemoteSocketAddress(), PORT);
