@@ -108,12 +108,12 @@ public class StreetMap {
                             new Pair<>(point.getX() - SEMAPHORE_DISTANCE, point.getY()),
                             new Pair<>(point.getX() + Street.STREET_SIDE_DISTANCE + SEMAPHORE_DISTANCE,
                                     point.getY() - Street.STREET_SIDE_DISTANCE),
-                            "S" + semaphoreCounter++);
+                            "S" + ++semaphoreCounter);
                     Semaphore semaphoreTwo = new Semaphore(SemaphoreState.RED,
                             new Pair<>(point.getX(), point.getY() - SEMAPHORE_DISTANCE - Street.STREET_SIDE_DISTANCE),
                             new Pair<>(point.getX() + Street.STREET_SIDE_DISTANCE,
                                     point.getY() + SEMAPHORE_DISTANCE),
-                            "S" + semaphoreCounter++);
+                            "S" + ++semaphoreCounter);
 
                     SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo);
 
@@ -134,6 +134,10 @@ public class StreetMap {
                     this.sensorsController.addSensorIntersection(new SensorsIntersection(sensorHStreet, sensorVStreet));
 
                     semaphoresCouple.start();
+
+                    System.out.println("+++++++++ " + semaphoreOne.getID());
+                    System.out.println("+++++++++ " + semaphoreTwo.getID());
+
                 }
             }
         }
