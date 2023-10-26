@@ -9,7 +9,6 @@ public class Sensor {
     private int startingCoordinate;
     private int endingCoordinate;
     private Semaphore semaphore;
-
     private Street street;
     private int vehiclesNumber;
 

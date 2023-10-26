@@ -33,7 +33,9 @@ public class NetworkController extends Thread {
         while (true) {
             print(sensorsController.getSensorsIntersections());
             this.statusRequest();
-            System.out.println("mandata");
+            if (isServerUp) {
+                this.sendSensorsData();
+            }
             try {
                 Thread.sleep(4000);
             } catch (InterruptedException e) {
@@ -42,21 +44,19 @@ public class NetworkController extends Thread {
         }
     }
 
-
-    private <T> void marshallRequest(Socket socket, Request<T> request) throws IOException {
+    private void sendSensorsData() {
         try {
-            OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
-            gson.toJson(request, writer);
-            writer.flush();
-        } finally {
-            socket.shutdownOutput();
+            rpc(new SensorsData(sensorsController.getSensorsIntersections()), EmptyResponse.class);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void statusRequest() {
+        System.out.println("Are you up?");
         try {
             rpc(new ServerStatusRequest(), EmptyResponse.class);
-            System.out.println("È up");
+            System.out.println("Server is up");
             isServerUp = true;
         } catch (Exception e) {
             System.out.println("server is down");
@@ -72,6 +72,16 @@ public class NetworkController extends Thread {
             return unmarshallResponse(socket, responseType);
         } catch (IOException e) {
             throw new IllegalStateException(e);
+        }
+    }
+
+    private <T> void marshallRequest(Socket socket, Request<T> request) throws IOException {
+        try {
+            OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
+            gson.toJson(request, writer);
+            writer.flush();
+        } finally {
+            socket.shutdownOutput();
         }
     }
 
