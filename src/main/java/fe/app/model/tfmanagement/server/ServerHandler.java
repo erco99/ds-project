@@ -1,10 +1,7 @@
 package fe.app.model.tfmanagement.server;
 
 import com.google.gson.Gson;
-import fe.app.model.tfmanagement.presentation.EmptyResponse;
-import fe.app.model.tfmanagement.presentation.Request;
-import fe.app.model.tfmanagement.presentation.Response;
-import fe.app.model.tfmanagement.presentation.ServerStatus;
+import fe.app.model.tfmanagement.presentation.*;
 import fe.app.util.GsonUtils;
 
 import java.io.IOException;
@@ -17,11 +14,13 @@ public class ServerHandler extends Thread {
 
     private final Socket socket;
     private final Gson gson;
+    private final TimingProcessor timingProcessor;
 
 
-    public ServerHandler(Socket socket) {
+    public ServerHandler(Socket socket, TimingProcessor timingProcessor) {
         this.socket = Objects.requireNonNull(socket);
-        gson = GsonUtils.createGson();
+        this.timingProcessor = timingProcessor;
+        this.gson = GsonUtils.createGson();
     }
 
     public void run() {
@@ -44,10 +43,14 @@ public class ServerHandler extends Thread {
     }
 
     private Response<?> computeResponse(Request<?> request) {
+        String req = gson.toJson(request);
         try {
             switch (request.getMethod()) {
                 case "status":
                     return new EmptyResponse(ServerStatus.OK, "Server is UP");
+                case "sensors_data":
+                    timingProcessor.processTimings(gson.fromJson(req, SensorsData.class).getArgument());
+                    return new EmptyResponse(ServerStatus.OK, "Ok");
                 default:
                     return new Response<>();
             }
