@@ -9,6 +9,7 @@ import fe.app.model.tfmanagement.semaphore.SemaphoreState;
 import fe.app.model.elements.street.DirectionLine;
 import fe.app.model.elements.street.Line;
 import fe.app.model.elements.street.Street;
+import fe.app.model.tfmanagement.semaphore.SemaphoresCouple;
 import fe.app.util.LinesUtil;
 import fe.app.util.Pair;
 
@@ -114,6 +115,8 @@ public class StreetMap {
                                     point.getY() + SEMAPHORE_DISTANCE),
                             "S" + semaphoreCounter++);
 
+                    SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo);
+
                     Sensor sensorHStreet = new Sensor(point.getX() - Sensor.DISTANCE_COVERED,
                             point.getX() + Street.STREET_SIDE_DISTANCE + Sensor.DISTANCE_COVERED,
                             semaphoreOne,
@@ -130,8 +133,7 @@ public class StreetMap {
 
                     this.sensorsController.addSensorIntersection(new SensorsIntersection(sensorHStreet, sensorVStreet));
 
-                    semaphoreOne.start();
-                    semaphoreTwo.start();
+                    semaphoresCouple.start();
                 }
             }
         }
