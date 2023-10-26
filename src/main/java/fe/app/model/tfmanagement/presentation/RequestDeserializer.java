@@ -1,9 +1,11 @@
 package fe.app.model.tfmanagement.presentation;
 
 import com.google.gson.*;
+import fe.app.model.elements.intersection.SensorsIntersection;
 import fe.app.util.GsonUtils;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 public class RequestDeserializer implements JsonDeserializer<Request<?>> {
     @Override
@@ -16,6 +18,9 @@ public class RequestDeserializer implements JsonDeserializer<Request<?>> {
                 if (object.has("method") && object.has("argument")) {
                     return switch (GsonUtils.getPropertyAsString(object, "method")) {
                         case "status" -> new ServerStatusRequest();
+                        case "sensors_data" -> new SensorsData(
+                                GsonUtils.getPropertyAs(object, "argument", ArrayList.class, context)
+                        );
                         default -> null;
                     };
                 }
