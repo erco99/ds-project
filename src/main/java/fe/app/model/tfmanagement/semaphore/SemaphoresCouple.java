@@ -18,9 +18,16 @@ public class SemaphoresCouple extends Thread {
     public void run() {
         try {
             this.socket = new Socket("localhost", PORT);
-            System.out.println("eccomi" + socket.getInputStream().read());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void stateChange() {
+        new Thread(() -> {
+            while (true) {
+                System.out.println("state change");
+            }
+        }).start();
     }
 }

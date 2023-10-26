@@ -2,13 +2,12 @@ package fe.app.model.tfmanagement.semaphore;
 
 import fe.app.util.Pair;
 
-import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class  Semaphore {
 
+    public static final int CYCLE_TIME = 40;
     private SemaphoreState state;
     private Pair<Integer,Integer> firstSidePosition;
     private Pair<Integer,Integer> secondSidePosition;
