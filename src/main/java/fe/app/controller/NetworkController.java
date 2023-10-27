@@ -2,6 +2,7 @@ package fe.app.controller;
 
 import com.google.gson.Gson;
 import fe.app.model.elements.intersection.SensorsIntersection;
+import fe.app.model.tfmanagement.client.ClientHandler;
 import fe.app.model.tfmanagement.presentation.*;
 import fe.app.util.GsonUtils;
 import fe.app.view.View;
@@ -21,6 +22,7 @@ public class NetworkController extends Thread {
     private int PORT = 2000;
     private final InetSocketAddress socket;
     private boolean isServerUp = true;
+    private ClientHandler clientHandler;
 
     public NetworkController(View view, SensorsController sensorsController) {
         this.view = view;
@@ -30,8 +32,8 @@ public class NetworkController extends Thread {
     }
 
     public void run() {
+        this.clientHandler = new ClientHandler(this.socket, this.gson);
         while (true) {
-            print(sensorsController.getSensorsIntersections());
             this.statusRequest();
             if (isServerUp) {
                 this.sendSensorsData();
@@ -46,7 +48,7 @@ public class NetworkController extends Thread {
 
     private void sendSensorsData() {
         try {
-            rpc(new SensorsData(sensorsController.getSensorsIntersections()), EmptyResponse.class);
+            clientHandler.rpc(new SensorsData(sensorsController.getSensorsIntersections()), EmptyResponse.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -55,7 +57,7 @@ public class NetworkController extends Thread {
     private void statusRequest() {
         System.out.println("Are you up?");
         try {
-            rpc(new ServerStatusRequest(), EmptyResponse.class);
+            clientHandler.rpc(new ServerStatusRequest(), EmptyResponse.class);
             System.out.println("Server is up");
             isServerUp = true;
         } catch (Exception e) {
@@ -63,47 +65,5 @@ public class NetworkController extends Thread {
             isServerUp = false;
         }
         this.view.getControlsPanel().changeServerStatus(this.isServerUp);
-    }
-
-    private <T, R> R rpc(Request<T> request, Class<? extends Response<R>> responseType) throws IOException {
-        try (var socket = new Socket()) {
-            socket.connect(this.socket);
-            marshallRequest(socket, request);
-            return unmarshallResponse(socket, responseType);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    private <T> void marshallRequest(Socket socket, Request<T> request) throws IOException {
-        try {
-            OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
-            gson.toJson(request, writer);
-            writer.flush();
-        } finally {
-            socket.shutdownOutput();
-        }
-    }
-
-    private <T> T unmarshallResponse(Socket socket, Class<? extends Response<T>> responseType) throws IOException {
-        try {
-            InputStreamReader reader = new InputStreamReader(socket.getInputStream());
-            Response<T> response = responseType.cast(gson.fromJson(reader, responseType));
-
-            return switch (response.getStatus()) {
-                case OK -> response.getResult();
-                case SERVER_ERROR -> throw new Error(response.getMessage());
-            };
-        } finally {
-            socket.shutdownInput();
-        }
-    }
-
-    private void print(ArrayList<SensorsIntersection> sensorsIntersections) {
-        for (SensorsIntersection sensorIntersection : sensorsIntersections) {
-            System.out.println("horizontal " + sensorIntersection.getHorizontalStreetSensor().getVehiclesNumber());
-            System.out.println("vertical " + sensorIntersection.getVerticalStreetSensor().getVehiclesNumber());
-
-        }
     }
 }

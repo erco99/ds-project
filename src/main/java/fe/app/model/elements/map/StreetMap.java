@@ -134,10 +134,6 @@ public class StreetMap {
                     this.sensorsController.addSensorIntersection(new SensorsIntersection(sensorHStreet, sensorVStreet));
 
                     semaphoresCouple.start();
-
-                    System.out.println("+++++++++ " + semaphoreOne.getID());
-                    System.out.println("+++++++++ " + semaphoreTwo.getID());
-
                 }
             }
         }
