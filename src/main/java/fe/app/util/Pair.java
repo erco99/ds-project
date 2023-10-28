@@ -4,11 +4,19 @@ package fe.app.util;
  * A standard generic Pair<X,Y>, with getters, hashCode, equals, and toString well implemented. 
  */
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Objects;
 
 public class Pair<X,Y> {
-	
+
+	@Expose
+	@SerializedName("c")
 	private final X x;
+
+	@Expose
+	@SerializedName("y")
 	private final Y y;
 	
 	public Pair(X x, Y y) {
