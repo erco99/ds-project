@@ -3,6 +3,7 @@ package fe.app.model.tfmanagement.server;
 import fe.app.model.elements.intersection.SensorsIntersection;
 import fe.app.model.elements.map.Sensor;
 import fe.app.model.tfmanagement.semaphore.Semaphore;
+import fe.app.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,21 +33,17 @@ public class TimingProcessor {
         int totalVehicles = vSensorVehicles + hSensorVehicles;
         double finalTime;
 
-        if (hSensorVehicles >= vSensorVehicles) {
-            finalTime = timeAlgorithm(hSensorVehicles, totalVehicles);
+        Pair<Sensor, Sensor> tempPair = hSensorVehicles >= vSensorVehicles
+                ? new Pair<>(hSensor,vSensor)
+                : new Pair<>(vSensor,hSensor);
 
-            System.out.println("tempo hsensor: " + finalTime);
-            System.out.println("tempo vsensor: " + (semaphoreCycleTime - finalTime));
+        finalTime = timeAlgorithm(tempPair.getX().getVehiclesNumber() + 1,
+                totalVehicles);
 
-            timings.put(hSensor.getSemaphore().getID(), finalTime);
-        } else {
-            finalTime = timeAlgorithm(vSensorVehicles, totalVehicles);
+        timings.put(tempPair.getX().getSemaphore().getID(), finalTime);
+        timings.put(tempPair.getY().getSemaphore().getID(), semaphoreCycleTime - finalTime);
 
-            System.out.println("tempo vsensor: " + finalTime);
-            System.out.println("tempo hsensor: " + (semaphoreCycleTime - finalTime));
-
-            timings.put(vSensor.getSemaphore().getID(), finalTime);
-        }
+        System.out.println(timings);
     }
 
     private  double timeAlgorithm(int vehicles, int tot) {
@@ -61,6 +58,13 @@ public class TimingProcessor {
         } else {
             return rawTime;
         }
+    }
+
+    public Map<String,Double> getTiming(Pair<String,String> semaphoresIds) {
+        Map<String,Double> tempMap = new HashMap<>();
+        tempMap.put(semaphoresIds.getX(), timings.get(semaphoresIds.getX()));
+        tempMap.put(semaphoresIds.getY(), timings.get(semaphoresIds.getY()));
+        return tempMap;
     }
 
 }
