@@ -19,6 +19,7 @@ public class SemaphoresCouple extends Thread {
     public static final int PORT = 2000;
     private ClientHandler clientHandler;
     private final Gson gson;
+    Map<String, Double> timeMap;
 
     public SemaphoresCouple(Semaphore hStreetSemaphore, Semaphore vStreetSemaphore) {
         this.hStreetSemaphore = hStreetSemaphore;
@@ -29,21 +30,21 @@ public class SemaphoresCouple extends Thread {
 
     public void run() {
         this.clientHandler = new ClientHandler(this.socket, this.gson);
-        startStateCycle();
-
-        while (true) {
-            sendTimingsRequest();
+        timeMap = clientHandler.rpc(
+                new TimingsRequest(new Pair<>(hStreetSemaphore.getID(), vStreetSemaphore.getID())),
+                TimingsResponse.class);
+        if (timeMap.containsValue(null)) {
+            timeMap.put(hStreetSemaphore.getID(), 20.0);
+            timeMap.put(vStreetSemaphore.getID(), 20.0);
         }
-
+        startStateCycle();
+        startTimingsRequests();
     }
 
-    private void sendTimingsRequest() {
+    private void startTimingsRequests() {
         try {
             while (true) {
-                Map<String, Double> prova = clientHandler.rpc(
-                        new TimingsRequest(new Pair<>(hStreetSemaphore.getID(), vStreetSemaphore.getID())),
-                        TimingsResponse.class);
-                System.out.println(prova);
+                sendTimingsRequest();
                 sleep(5000);
             }
         } catch (Exception e) {
@@ -51,9 +52,29 @@ public class SemaphoresCouple extends Thread {
         }
     }
 
+    public void sendTimingsRequest() {
+        timeMap = clientHandler.rpc(
+                new TimingsRequest(new Pair<>(hStreetSemaphore.getID(), vStreetSemaphore.getID())),
+                TimingsResponse.class);
+    }
+
     private void startStateCycle() {
         new Thread(() -> {
             while (true) {
+                hStreetSemaphore.setCurrentState(SemaphoreState.GREEN);
+                vStreetSemaphore.setCurrentState((SemaphoreState.RED));
+                try {
+                    sleep((long) (timeMap.get(hStreetSemaphore.getID()) * 1000));
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                hStreetSemaphore.setCurrentState(SemaphoreState.RED);
+                vStreetSemaphore.setCurrentState((SemaphoreState.GREEN));
+                try {
+                    sleep((long) (timeMap.get(vStreetSemaphore.getID()) * 1000));
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }).start();
     }

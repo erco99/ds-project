@@ -84,6 +84,7 @@ public class MapPanel extends JPanel {
         for (Semaphore semaphore : streetMap.getSemaphores()) {
             if (semaphore.getCurrentState() == SemaphoreState.RED) g2.setColor(Color.RED);
             if (semaphore.getCurrentState() == SemaphoreState.GREEN) g2.setColor(Color.GREEN);
+            if (semaphore.getCurrentState() == SemaphoreState.YELLOW) g2.setColor(Color.YELLOW);
 
             g2.drawLine(semaphore.getFirstSidePosition().getX(),
                     semaphore.getFirstSidePosition().getY(),
