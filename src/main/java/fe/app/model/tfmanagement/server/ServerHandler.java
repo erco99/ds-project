@@ -51,6 +51,11 @@ public class ServerHandler extends Thread {
                 case "sensors_data":
                     timingProcessor.processTimings(gson.fromJson(req, SensorsData.class).getArgument());
                     return new EmptyResponse(ServerStatus.OK, "Ok");
+                case "timings":
+                    return new TimingsResponse(
+                            ServerStatus.OK,
+                            "Timings obtained",
+                            timingProcessor.getTiming(gson.fromJson(req, TimingsRequest.class).getArgument()));
                 default:
                     return new Response<>();
             }
