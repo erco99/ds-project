@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import fe.app.model.elements.intersection.SensorsIntersection;
 import fe.app.model.elements.map.Sensor;
 import fe.app.model.tfmanagement.presentation.*;
+import fe.app.model.tfmanagement.semaphore.Semaphore;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public class GsonUtils {
                 .registerTypeAdapter(SensorsIntersection.class, new SensorsIntersectionDeserializer())
                 .registerTypeAdapter(Sensor.class, new SensorSerializer())
                 .registerTypeAdapter(Sensor.class, new SensorDeserializer())
+                .registerTypeAdapter(Semaphore.class, new SemaphoreSerializer())
+                .registerTypeAdapter(Semaphore.class, new SempahoreDeserializer())
                 .create();
     }
 
