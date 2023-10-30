@@ -95,7 +95,8 @@ public class Vehicle extends Thread {
 
     private void checkIfGo() throws InterruptedException {
         if (this.semaphorePoints.contains(Pair.toInteger(this.position)) &&
-                this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getCurrentState() == SemaphoreState.RED) {
+                ((this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getCurrentState() == SemaphoreState.RED) ||
+                (this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getCurrentState() == SemaphoreState.YELLOW))) {
             this.stop = true;
         } else if (this.semaphorePoints.contains(Pair.toInteger(this.position)) &&
                 this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getCurrentState() == SemaphoreState.GREEN) {

@@ -5,6 +5,7 @@ import fe.app.model.tfmanagement.semaphore.SemaphoreState;
 import fe.app.model.elements.street.Street;
 import fe.app.model.elements.map.StreetMap;
 import fe.app.model.elements.vehicle.Vehicle;
+import fe.app.util.StreetType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +16,7 @@ public class MapPanel extends JPanel {
 
     public static final int VEHICLE_WIDTH = 20;
     public static final int VEHICLE_HEIGHT = 10;
+    public static final int SEMAPHORE_DIAMETER = 10;
     private Dimension panelDimension;
     private int streetAngle;
     private ArrayList<Vehicle> vehicles;
@@ -86,14 +88,33 @@ public class MapPanel extends JPanel {
             if (semaphore.getCurrentState() == SemaphoreState.GREEN) g2.setColor(Color.GREEN);
             if (semaphore.getCurrentState() == SemaphoreState.YELLOW) g2.setColor(Color.YELLOW);
 
-            g2.drawLine(semaphore.getFirstSidePosition().getX(),
+            int xShift = 0;
+            int yShift = 0;
+
+            if(semaphore.getStreetType() == StreetType.HORIZONTAL) {
+                xShift = 30;
+            } else {
+                yShift = 30;
+            }
+
+            g2.fillOval(semaphore.getFirstSidePosition().getX() - SEMAPHORE_DIAMETER/ 2 + xShift,
+                    semaphore.getFirstSidePosition().getY() - SEMAPHORE_DIAMETER / 2 + yShift,
+                    SEMAPHORE_DIAMETER,
+                    SEMAPHORE_DIAMETER);
+
+            g2.fillOval(semaphore.getSecondSidePosition().getX() - SEMAPHORE_DIAMETER/ 2 - xShift,
+                    semaphore.getSecondSidePosition().getY() - SEMAPHORE_DIAMETER/ 2 - yShift,
+                    SEMAPHORE_DIAMETER,
+                    SEMAPHORE_DIAMETER);
+
+  /*          g2.drawLine(semaphore.getFirstSidePosition().getX(),
                     semaphore.getFirstSidePosition().getY(),
                     semaphore.getFirstSidePosition().getX() + 1,
                     semaphore.getFirstSidePosition().getY() + 1);
             g2.drawLine(semaphore.getSecondSidePosition().getX(),
                     semaphore.getSecondSidePosition().getY(),
                     semaphore.getSecondSidePosition().getX() + 1,
-                    semaphore.getSecondSidePosition().getY() + 1);
+                    semaphore.getSecondSidePosition().getY() + 1);*/
         }
     }
 }

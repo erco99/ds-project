@@ -12,6 +12,7 @@ import fe.app.model.elements.street.Street;
 import fe.app.model.tfmanagement.semaphore.SemaphoresCouple;
 import fe.app.util.LinesUtil;
 import fe.app.util.Pair;
+import fe.app.util.StreetType;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class StreetMap {
 
     private static final int HORIZONTAL_STREETS_NUMBER = 3;
     private static final int VERTICAL_STREETS_NUMBER = 2;
-    public static final int SEMAPHORE_DISTANCE = 30;
+    public static final int SEMAPHORE_DISTANCE = 50;
     private final Random random = new Random();
     private final ArrayList<Street> horizontalStreets;
     private final ArrayList<Street> verticalStreets;
@@ -108,11 +109,13 @@ public class StreetMap {
                             new Pair<>(point.getX() - SEMAPHORE_DISTANCE, point.getY()),
                             new Pair<>(point.getX() + Street.STREET_SIDE_DISTANCE + SEMAPHORE_DISTANCE,
                                     point.getY() - Street.STREET_SIDE_DISTANCE),
+                            StreetType.HORIZONTAL,
                             "S" + ++semaphoreCounter);
                     Semaphore semaphoreTwo = new Semaphore(SemaphoreState.RED,
                             new Pair<>(point.getX(), point.getY() - SEMAPHORE_DISTANCE - Street.STREET_SIDE_DISTANCE),
                             new Pair<>(point.getX() + Street.STREET_SIDE_DISTANCE,
                                     point.getY() + SEMAPHORE_DISTANCE),
+                            StreetType.VERTICAL,
                             "S" + ++semaphoreCounter);
 
                     SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo);

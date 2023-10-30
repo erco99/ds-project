@@ -62,16 +62,31 @@ public class SemaphoresCouple extends Thread {
         new Thread(() -> {
             while (true) {
                 hStreetSemaphore.setCurrentState(SemaphoreState.GREEN);
-                vStreetSemaphore.setCurrentState((SemaphoreState.RED));
+                vStreetSemaphore.setCurrentState(SemaphoreState.RED);
                 try {
                     sleep((long) (timeMap.get(hStreetSemaphore.getID()) * 1000));
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+
+                hStreetSemaphore.setCurrentState(SemaphoreState.YELLOW);
+                try {
+                    sleep(Semaphore.YELLOW_TIME * 1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
                 hStreetSemaphore.setCurrentState(SemaphoreState.RED);
-                vStreetSemaphore.setCurrentState((SemaphoreState.GREEN));
+                vStreetSemaphore.setCurrentState(SemaphoreState.GREEN);
                 try {
                     sleep((long) (timeMap.get(vStreetSemaphore.getID()) * 1000));
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                vStreetSemaphore.setCurrentState(SemaphoreState.YELLOW);
+                try {
+                    sleep(Semaphore.YELLOW_TIME * 1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
