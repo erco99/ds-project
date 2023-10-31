@@ -40,8 +40,8 @@ public class TimingProcessor {
         finalTime = timeAlgorithm(tempPair.getX().getVehiclesNumber() + 1,
                 totalVehicles);
 
-        timings.put(tempPair.getX().getSemaphore().getID(), finalTime);
-        timings.put(tempPair.getY().getSemaphore().getID(), semaphoreCycleTime - finalTime);
+        timings.put(tempPair.getX().getSemaphore().getId(), finalTime);
+        timings.put(tempPair.getY().getSemaphore().getId(), semaphoreCycleTime - finalTime);
 
         System.out.println(timings);
     }

@@ -14,7 +14,7 @@ public class View {
     private ControlsPanel controlsPanel;
     private Controller controller;
     private NetworkController networkController;
-    private static final int CONTROLS_PANEL_WIDTH = 200;
+    private static final int CONTROLS_PANEL_WIDTH = 300;
     static JFrame frame;
 
     public View() {

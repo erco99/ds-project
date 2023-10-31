@@ -1,18 +1,12 @@
 package fe.app.controller;
 
 import com.google.gson.Gson;
-import fe.app.model.elements.intersection.SensorsIntersection;
 import fe.app.model.tfmanagement.client.ClientHandler;
 import fe.app.model.tfmanagement.presentation.*;
 import fe.app.util.GsonUtils;
 import fe.app.view.View;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.util.ArrayList;
 
 public class NetworkController extends Thread {
 
@@ -37,6 +31,7 @@ public class NetworkController extends Thread {
             this.statusRequest();
             if (isServerUp) {
                 this.sendSensorsData();
+                this.view.getControlsPanel().setSensorsLabel(sensorsController.getSensorsIntersections());
             }
             try {
                 Thread.sleep(4000);

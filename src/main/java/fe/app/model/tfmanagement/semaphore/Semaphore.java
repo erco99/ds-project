@@ -43,7 +43,7 @@ public class Semaphore {
         return secondSidePosition;
     }
 
-    public String getID() {
+    public String getId() {
         return id;
     }
 
