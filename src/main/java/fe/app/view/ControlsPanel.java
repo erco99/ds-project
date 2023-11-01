@@ -3,6 +3,7 @@ package fe.app.view;
 import fe.app.controller.Controller;
 import fe.app.model.elements.intersection.SensorsIntersection;
 import fe.app.model.elements.map.Sensor;
+import fe.app.model.tfmanagement.semaphore.Semaphore;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
@@ -11,6 +12,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ControlsPanel extends JPanel implements ActionListener {
 
@@ -19,8 +22,11 @@ public class ControlsPanel extends JPanel implements ActionListener {
     private final JButton serverStatusButton;
     private final DefaultTableModel sensorsTableModel;
     private final JTable sensorsTable;
+    private final DefaultTableModel timingsTableModel;
+    private final JTable timingsTable;
     private final Controller controller;
     private Dimension panelDimension;
+    private Map<String,Double> timings = new HashMap<>();
 
     public ControlsPanel(Controller controller, Dimension dimension) {
         this.controller = controller;
@@ -50,8 +56,8 @@ public class ControlsPanel extends JPanel implements ActionListener {
 
         this.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        JLabel tableLabel = new JLabel("Sensors data:");
-        this.add(tableLabel);
+        JLabel sensorsTableLabel = new JLabel("Sensors data:");
+        this.add(sensorsTableLabel);
 
         String[] columnNames = {"Street", "Semaphore", "Vehicles"};
         this.sensorsTableModel = new DefaultTableModel(columnNames, 0);
@@ -59,6 +65,18 @@ public class ControlsPanel extends JPanel implements ActionListener {
 
         JScrollPane scrollPane = new JScrollPane(sensorsTable);
         this.add(scrollPane);
+
+        this.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        JLabel timingsTableLabel = new JLabel("Semaphores label:");
+        this.add(timingsTableLabel);
+
+        columnNames = new String[]{"Semaphore", "Green", "Red"};
+        this.timingsTableModel = new DefaultTableModel(columnNames, 0);
+        this.timingsTable = new JTable(timingsTableModel);
+
+        JScrollPane scrollPaneTimings = new JScrollPane(timingsTable);
+        this.add(scrollPaneTimings);
     }
 
     @Override
@@ -84,13 +102,13 @@ public class ControlsPanel extends JPanel implements ActionListener {
             this.sensorsTableModel.getDataVector().removeAllElements();
             this.sensorsTableModel.fireTableDataChanged();
             for (SensorsIntersection sensorsIntersection : sensorsIntersections) {
-                this.addTableRow(sensorsIntersection.getHorizontalStreetSensor());
-                this.addTableRow(sensorsIntersection.getVerticalStreetSensor());
+                this.addSensorsTableRow(sensorsIntersection.getHorizontalStreetSensor());
+                this.addSensorsTableRow(sensorsIntersection.getVerticalStreetSensor());
             }
         });
     }
 
-    private void addTableRow(Sensor sensor) {
+    private void addSensorsTableRow(Sensor sensor) {
         String idStreet = sensor.getStreet().getId();
         String idSem = sensor.getSemaphore().getId();
         int vehicles = sensor.getVehiclesNumber();
@@ -98,4 +116,17 @@ public class ControlsPanel extends JPanel implements ActionListener {
         this.sensorsTableModel.addRow(new Object[]{idStreet, idSem, vehicles});
     }
 
+    public void updateTimingsTable(Map<String, Double> timeMap) {
+        timings.putAll(timeMap);
+        SwingUtilities.invokeLater(() -> {
+            this.timingsTableModel.getDataVector().removeAllElements();
+            this.timingsTableModel.fireTableDataChanged();
+            for (Map.Entry<String,Double> timing : timings.entrySet()) {
+                if (timing.getValue() != null) {
+                    Double greenTime = timing.getValue();
+                    this.timingsTableModel.addRow(new Object[]{timing.getKey(), greenTime, Semaphore.CYCLE_TIME - greenTime});
+                }
+            }
+        });
+    }
 }

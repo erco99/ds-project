@@ -1,5 +1,6 @@
 package fe.app.model.elements.map;
 
+import fe.app.controller.Controller;
 import fe.app.controller.SensorsController;
 import fe.app.model.elements.intersection.SensorsIntersection;
 import fe.app.model.elements.intersection.StreetsIntersection;
@@ -31,8 +32,10 @@ public class StreetMap {
     private final ArrayList<StreetsIntersection> streetsIntersections;
     private ArrayList<Semaphore> semaphores;
     private SensorsController sensorsController;
+    private Controller controller;
 
-    public StreetMap() {
+    public StreetMap(Controller controller) {
+        this.controller = controller;
         this.horizontalStreets = new ArrayList<>();
         this.verticalStreets = new ArrayList<>();
         this.streetSidesIntersections = new ArrayList<>();
@@ -118,7 +121,7 @@ public class StreetMap {
                             StreetType.VERTICAL,
                             "S" + ++semaphoreCounter);
 
-                    SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo);
+                    SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, controller);
 
                     Sensor sensorHStreet = new Sensor(point.getX() - Sensor.DISTANCE_COVERED,
                             point.getX() + Street.STREET_SIDE_DISTANCE + Sensor.DISTANCE_COVERED,

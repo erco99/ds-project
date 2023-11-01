@@ -5,6 +5,8 @@ import fe.app.model.elements.vehicle.VehicleViewer;
 import fe.app.model.elements.map.MapContext;
 import fe.app.view.View;
 
+import java.util.Map;
+
 public class Controller {
 
     private StreetMap streetMap;
@@ -20,7 +22,7 @@ public class Controller {
 
         this.view = new View();
 
-        this.streetMap = new StreetMap();
+        this.streetMap = new StreetMap(this);
         this.mapContext = new MapContext(streetMap);
 
         this.sensorsController = new SensorsController(mapContext);
@@ -46,5 +48,9 @@ public class Controller {
 
     public void turnGreen() {
         streetMap.turnGreen();
+    }
+
+    public void updateViewTimingsTable(Map<String, Double> timeMap) {
+        view.getControlsPanel().updateTimingsTable(timeMap);
     }
 }

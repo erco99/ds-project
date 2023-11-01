@@ -1,6 +1,7 @@
 package fe.app.model.tfmanagement.semaphore;
 
 import com.google.gson.Gson;
+import fe.app.controller.Controller;
 import fe.app.model.tfmanagement.client.ClientHandler;
 import fe.app.model.tfmanagement.presentation.*;
 import fe.app.util.GsonUtils;
@@ -17,13 +18,15 @@ public class SemaphoresCouple extends Thread {
     public static final int PORT = 2000;
     private ClientHandler clientHandler;
     private final Gson gson;
-    Map<String, Double> timeMap;
+    private Map<String, Double> timeMap;
+    private Controller controller;
 
-    public SemaphoresCouple(Semaphore hStreetSemaphore, Semaphore vStreetSemaphore) {
+    public SemaphoresCouple(Semaphore hStreetSemaphore, Semaphore vStreetSemaphore, Controller controller) {
         this.hStreetSemaphore = hStreetSemaphore;
         this.vStreetSemaphore = vStreetSemaphore;
         this.socket = new InetSocketAddress("localhost", PORT);
         this.gson = GsonUtils.createGson();
+        this.controller = controller;
     }
 
     public void run() {
@@ -54,6 +57,7 @@ public class SemaphoresCouple extends Thread {
         timeMap = clientHandler.rpc(
                 new TimingsRequest(new Pair<>(hStreetSemaphore.getId(), vStreetSemaphore.getId())),
                 TimingsResponse.class);
+        controller.updateViewTimingsTable(timeMap);
     }
 
     private void startStateCycle() {
