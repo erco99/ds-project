@@ -76,7 +76,7 @@ public class ControlsPanel extends JPanel implements ActionListener {
 
         this.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        JLabel timingsTableLabel = new JLabel("Semaphores label:");
+        JLabel timingsTableLabel = new JLabel("Semaphores timings:");
         this.add(timingsTableLabel);
 
         columnNames = new String[]{"Semaphore", "Green", "Red"};

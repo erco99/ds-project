@@ -22,8 +22,8 @@ import java.util.Random;
 
 public class StreetMap {
 
-    private static final int HORIZONTAL_STREETS_NUMBER = 3;
-    private static final int VERTICAL_STREETS_NUMBER = 2;
+    private static final int HORIZONTAL_STREETS_NUMBER = 2;
+    private static final int VERTICAL_STREETS_NUMBER = 3;
     public static final int SEMAPHORE_DISTANCE = 50;
     private final Random random = new Random();
     private final ArrayList<Street> horizontalStreets;
@@ -46,15 +46,15 @@ public class StreetMap {
     public void create() {
         int distance = 0;
         for(int i = 0; i < HORIZONTAL_STREETS_NUMBER; i++) {
-            int newY = random.nextInt(MapDimension.MAP_HEIGHT / HORIZONTAL_STREETS_NUMBER - 130,
-                        MapDimension.MAP_HEIGHT / HORIZONTAL_STREETS_NUMBER - 40);
+            int newY = random.nextInt(MapDimension.MAP_HEIGHT / HORIZONTAL_STREETS_NUMBER - 250,
+                        MapDimension.MAP_HEIGHT / HORIZONTAL_STREETS_NUMBER - 140);
             this.horizontalStreets.add(new Street("h"+i, MapDimension.MAP_WIDTH, MapDimension.MAP_HEIGHT, new Pair<>(0, newY+distance)));
             distance += newY;
         }
         distance = 0;
         for(int i = 0; i < VERTICAL_STREETS_NUMBER; i++) {
-            int newX = random.nextInt(MapDimension.MAP_WIDTH / VERTICAL_STREETS_NUMBER - 300,
-                    MapDimension.MAP_WIDTH / VERTICAL_STREETS_NUMBER - 140);
+            int newX = random.nextInt(MapDimension.MAP_WIDTH / VERTICAL_STREETS_NUMBER - 150,
+                    MapDimension.MAP_WIDTH / VERTICAL_STREETS_NUMBER - 100);
             this.verticalStreets.add(new Street("v"+i, MapDimension.MAP_WIDTH, MapDimension.MAP_HEIGHT, new Pair<>(newX + distance, 0)));
             distance += newX;
         }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class TrafficController extends Thread {
 
+    private static final int CAR_SPAWN_MILLIS = 700;
     private int vehiclesNumber;
     private MapContext mapContext;
     private boolean run = true;
@@ -33,7 +34,7 @@ public class TrafficController extends Thread {
             }
 
             try {
-                sleep(800);
+                sleep(CAR_SPAWN_MILLIS);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

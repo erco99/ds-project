@@ -52,7 +52,9 @@ public class Controller {
     }
 
     public void updateViewTimingsTable(Map<String, Double> timeMap) {
-        view.getControlsPanel().updateTimingsTable(timeMap);
+        if (view.getControlsPanel() != null) {
+            view.getControlsPanel().updateTimingsTable(timeMap);
+        }
     }
 
 
