@@ -17,13 +17,14 @@ import java.util.Map;
 
 public class ControlsPanel extends JPanel implements ActionListener {
 
-    private final JButton addVehicleButton;
-    private final JButton turnGreenButton;
+    private final JButton startButton;
+    private final JButton stopButton;
     private final JButton serverStatusButton;
     private final DefaultTableModel sensorsTableModel;
     private final JTable sensorsTable;
     private final DefaultTableModel timingsTableModel;
     private final JTable timingsTable;
+    private final JSpinner vehiclesNumberSpinner;
     private final Controller controller;
     private Dimension panelDimension;
     private Map<String,Double> timings = new HashMap<>();
@@ -38,15 +39,22 @@ public class ControlsPanel extends JPanel implements ActionListener {
 
         this.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        this.addVehicleButton = new JButton("add vehicle");
-        this.add(addVehicleButton);
-        this.addVehicleButton.addActionListener(this);
+        this.add(new JLabel("Set number of vehicles:"));
 
-        this.add(Box.createRigidArea(new Dimension(0, 15)));
+        SpinnerModel value = new SpinnerNumberModel(10,1,30,1);
+        this.vehiclesNumberSpinner = new JSpinner(value);
+        this.vehiclesNumberSpinner.setSize(30,100);
+        this.add(this.vehiclesNumberSpinner);
 
-        this.turnGreenButton = new JButton("turn green");
-        this.add(turnGreenButton);
-        this.turnGreenButton.addActionListener(this);
+        this.startButton = new JButton("START");
+        this.stopButton = new JButton("STOP");
+        this.stopButton.setEnabled(false);
+
+        this.add(startButton);
+        this.add(stopButton);
+
+        this.startButton.addActionListener(this);
+        this.stopButton.addActionListener(this);
 
         this.add(Box.createRigidArea(new Dimension(0, 15)));
 
@@ -81,11 +89,15 @@ public class ControlsPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == this.addVehicleButton) {
-            this.controller.addVehicle();
+        if (e.getSource() == this.startButton) {
+            this.startButton.setEnabled(false);
+            this.stopButton.setEnabled(true);
+            this.controller.startTraffic((Integer) vehiclesNumberSpinner.getValue());
         }
-        if (e.getSource() == this.turnGreenButton) {
-            this.controller.turnGreen();
+        if (e.getSource() == this.stopButton) {
+            this.stopButton.setEnabled(false);
+            this.startButton.setEnabled(true);
+            this.controller.stopTraffic();
         }
     }
 

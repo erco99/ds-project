@@ -40,7 +40,7 @@ public class MapPanel extends JPanel {
 
         synchronized (this){
             if (this.vehicles!=null){
-                this.vehicles.forEach(v -> {
+                for (Vehicle v: new ArrayList<>(this.vehicles)) {
                     int x0 = v.getPosition().getX().intValue();
                     int y0 = v.getPosition().getY().intValue();
 
@@ -56,7 +56,7 @@ public class MapPanel extends JPanel {
                     g2.draw(rect);
                     g2.setTransform(saved);
 
-                });
+                }
             }
         }
         paintStreetMap(g2);

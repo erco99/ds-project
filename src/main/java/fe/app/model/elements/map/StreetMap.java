@@ -46,13 +46,15 @@ public class StreetMap {
     public void create() {
         int distance = 0;
         for(int i = 0; i < HORIZONTAL_STREETS_NUMBER; i++) {
-            int newY = random.nextInt(100, 220);
+            int newY = random.nextInt(MapDimension.MAP_HEIGHT / HORIZONTAL_STREETS_NUMBER - 130,
+                        MapDimension.MAP_HEIGHT / HORIZONTAL_STREETS_NUMBER - 40);
             this.horizontalStreets.add(new Street("h"+i, MapDimension.MAP_WIDTH, MapDimension.MAP_HEIGHT, new Pair<>(0, newY+distance)));
             distance += newY;
         }
         distance = 0;
         for(int i = 0; i < VERTICAL_STREETS_NUMBER; i++) {
-            int newX = random.nextInt(200,400);
+            int newX = random.nextInt(MapDimension.MAP_WIDTH / VERTICAL_STREETS_NUMBER - 300,
+                    MapDimension.MAP_WIDTH / VERTICAL_STREETS_NUMBER - 140);
             this.verticalStreets.add(new Street("v"+i, MapDimension.MAP_WIDTH, MapDimension.MAP_HEIGHT, new Pair<>(newX + distance, 0)));
             distance += newX;
         }

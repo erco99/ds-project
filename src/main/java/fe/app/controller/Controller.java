@@ -14,6 +14,7 @@ public class Controller {
     private NetworkController networkController;
     private SensorsController sensorsController;
     private View view;
+    private TrafficController trafficController;
 
     public Controller() {
     }
@@ -39,18 +40,20 @@ public class Controller {
 
         this.networkController.start();
         this.sensorsController.start();
-
     }
 
-    public void addVehicle() {
-        mapContext.addVehicle();
+    public void startTraffic(int vehiclesNumber) {
+        this.trafficController = new TrafficController(vehiclesNumber, mapContext);
+        trafficController.start();
     }
 
-    public void turnGreen() {
-        streetMap.turnGreen();
+    public void stopTraffic() {
+        trafficController.stopTraffic();
     }
 
     public void updateViewTimingsTable(Map<String, Double> timeMap) {
         view.getControlsPanel().updateTimingsTable(timeMap);
     }
+
+
 }

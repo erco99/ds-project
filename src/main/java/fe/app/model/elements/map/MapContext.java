@@ -31,12 +31,16 @@ public class MapContext {
 
     public ArrayList<Pair<Double, Double>> getAllPositions() {
         ArrayList<Pair<Double, Double>> positions = new ArrayList<>();
-        for (Vehicle vehicle : this.vehicles) {
+        for (Vehicle vehicle : new ArrayList<>(this.vehicles)) {
             double x = (double)Math.round(vehicle.getPosition().getX());
             double y= (double)Math.round(vehicle.getPosition().getY());
             positions.add(new Pair<>(x,y));
         }
 
         return positions;
+    }
+
+    public void removeVehicle(Vehicle vehicle) {
+        this.vehicles.remove(vehicle);
     }
 }
