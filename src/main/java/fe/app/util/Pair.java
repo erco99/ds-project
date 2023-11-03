@@ -12,7 +12,7 @@ import java.util.Objects;
 public class Pair<X,Y> {
 
 	@Expose
-	@SerializedName("c")
+	@SerializedName("x")
 	private final X x;
 
 	@Expose
