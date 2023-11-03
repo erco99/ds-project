@@ -2,6 +2,7 @@
 package fe.app.model.tfmanagement.presentation;
 
 import com.google.gson.*;
+import fe.app.model.elements.map.Sensor;
 import fe.app.model.tfmanagement.semaphore.Semaphore;
 import fe.app.util.GsonUtils;
 
@@ -17,7 +18,7 @@ public class SempahoreDeserializer implements JsonDeserializer<Semaphore> {
                 if (object.has("ID")) {
                     return new Semaphore(
                             null,
-                            null,
+                            GsonUtils.getPropertyAs(object, "firstSide", Sensor.class, context),
                             null,
                             null,
                             GsonUtils.getPropertyAsString(object, "ID")
