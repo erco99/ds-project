@@ -3,6 +3,7 @@ package fe.app.model.tfmanagement.semaphore;
 import fe.app.util.Pair;
 import fe.app.util.StreetType;
 
+import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -15,16 +16,22 @@ public class Semaphore {
     private Pair<Integer,Integer> secondSidePosition;
     private StreetType streetType;
     private String id;
+    private SemaphoreShape shape;
 
     public Semaphore(SemaphoreState state,
                      Pair<Integer, Integer> firstSidePosition,
                      Pair<Integer, Integer> secondSidePosition,
-                     StreetType streetType, String id) {
+                     StreetType streetType,
+                     String id) {
         this.state = state;
         this.firstSidePosition = firstSidePosition;
         this.secondSidePosition = secondSidePosition;
         this.streetType = streetType;
         this.id = id;
+
+        if (firstSidePosition != null || secondSidePosition != null) {
+            this.shape = new SemaphoreShape(firstSidePosition, secondSidePosition, streetType);
+        }
     }
 
     public void setCurrentState(SemaphoreState state) {
@@ -55,5 +62,9 @@ public class Semaphore {
 
     public StreetType getStreetType() {
         return streetType;
+    }
+
+    public SemaphoreShape getShape() {
+        return shape;
     }
 }

@@ -1,14 +1,12 @@
-
 package fe.app.model.tfmanagement.presentation;
 
 import com.google.gson.*;
-import fe.app.model.elements.map.Sensor;
 import fe.app.model.tfmanagement.semaphore.Semaphore;
 import fe.app.util.GsonUtils;
 
 import java.lang.reflect.Type;
 
-public class SempahoreDeserializer implements JsonDeserializer<Semaphore> {
+public class SemaphoreDeserializer implements JsonDeserializer<Semaphore> {
 
     @Override
     public Semaphore deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -18,7 +16,7 @@ public class SempahoreDeserializer implements JsonDeserializer<Semaphore> {
                 if (object.has("ID")) {
                     return new Semaphore(
                             null,
-                            GsonUtils.getPropertyAs(object, "firstSide", Sensor.class, context),
+                            null,
                             null,
                             null,
                             GsonUtils.getPropertyAsString(object, "ID")

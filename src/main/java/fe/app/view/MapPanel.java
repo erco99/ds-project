@@ -5,24 +5,28 @@ import fe.app.model.tfmanagement.semaphore.SemaphoreState;
 import fe.app.model.elements.street.Street;
 import fe.app.model.elements.map.StreetMap;
 import fe.app.model.elements.vehicle.Vehicle;
+import fe.app.util.Pair;
 import fe.app.util.StreetType;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MapPanel extends JPanel {
 
     public static final int VEHICLE_WIDTH = 20;
     public static final int VEHICLE_HEIGHT = 10;
-    public static final int SEMAPHORE_DIAMETER = 10;
     private Dimension panelDimension;
     private int streetAngle;
     private ArrayList<Vehicle> vehicles;
     private StreetMap streetMap;
 
     public MapPanel(StreetMap streetMap, Dimension dimension) {
+        setToolTipText("");
         this.streetMap = streetMap;
         this.panelDimension = dimension;
         streetMap.create();
@@ -61,6 +65,18 @@ public class MapPanel extends JPanel {
         }
         paintStreetMap(g2);
     }
+    @Override
+    public String getToolTipText(MouseEvent e) {
+        for (Semaphore semaphore: streetMap.getSemaphores()) {
+            if (semaphore.getShape().getFirstSideShape().contains(e.getPoint())) {
+                return semaphore.getId();
+            }
+            if (semaphore.getShape().getSecondSideShape().contains(e.getPoint())) {
+                return semaphore.getId();
+            }
+        }
+        return null;
+    }
 
     public void updateVehiclesPosition(ArrayList<Vehicle> vehicles){
         synchronized(this){
@@ -70,12 +86,18 @@ public class MapPanel extends JPanel {
     }
 
     private void paintStreetMap(Graphics2D g2) {
-        ArrayList<Street> prova = new ArrayList<>(streetMap.getHorizontalStreets());
-        prova.addAll(streetMap.getVerticalStreets());
+        ArrayList<Street> streets = new ArrayList<>(streetMap.getHorizontalStreets());
+        streets.addAll(streetMap.getVerticalStreets());
 
-        for (Street street : prova) {
+        for (Street street : streets) {
             street.getFirstSide().paint(g2);
             street.getSecondSide().paint(g2);
+
+            if (Objects.equals(street.getType(), StreetType.HORIZONTAL.toString())) {
+                g2.drawString(street.getId(), street.getFirstSide().x1 + 10, street.getFirstSide().y1 - 10);
+            } else {
+                g2.drawString(street.getId(), street.getFirstSide().x1 - 20, street.getFirstSide().y1 + 20);
+            }
         }
 
         for (Polygon intersection : streetMap.getStreetSidesIntersections()) {
@@ -88,33 +110,9 @@ public class MapPanel extends JPanel {
             if (semaphore.getCurrentState() == SemaphoreState.GREEN) g2.setColor(Color.GREEN);
             if (semaphore.getCurrentState() == SemaphoreState.YELLOW) g2.setColor(Color.ORANGE);
 
-            int xShift = 0;
-            int yShift = 0;
+            g2.fill(semaphore.getShape().getFirstSideShape());
+            g2.fill(semaphore.getShape().getSecondSideShape());
 
-            if(semaphore.getStreetType() == StreetType.HORIZONTAL) {
-                xShift = 30;
-            } else {
-                yShift = 30;
-            }
-
-            g2.fillOval(semaphore.getFirstSidePosition().getX() - SEMAPHORE_DIAMETER/ 2 + xShift,
-                    semaphore.getFirstSidePosition().getY() - SEMAPHORE_DIAMETER / 2 + yShift,
-                    SEMAPHORE_DIAMETER,
-                    SEMAPHORE_DIAMETER);
-
-            g2.fillOval(semaphore.getSecondSidePosition().getX() - SEMAPHORE_DIAMETER/ 2 - xShift,
-                    semaphore.getSecondSidePosition().getY() - SEMAPHORE_DIAMETER/ 2 - yShift,
-                    SEMAPHORE_DIAMETER,
-                    SEMAPHORE_DIAMETER);
-
-  /*          g2.drawLine(semaphore.getFirstSidePosition().getX(),
-                    semaphore.getFirstSidePosition().getY(),
-                    semaphore.getFirstSidePosition().getX() + 1,
-                    semaphore.getFirstSidePosition().getY() + 1);
-            g2.drawLine(semaphore.getSecondSidePosition().getX(),
-                    semaphore.getSecondSidePosition().getY(),
-                    semaphore.getSecondSidePosition().getX() + 1,
-                    semaphore.getSecondSidePosition().getY() + 1);*/
         }
     }
 }
