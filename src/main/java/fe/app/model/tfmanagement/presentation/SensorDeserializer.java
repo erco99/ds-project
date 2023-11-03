@@ -19,9 +19,9 @@ public class SensorDeserializer implements JsonDeserializer<Sensor>  {
                     return s;
                 }
             }
-            throw new JsonParseException("Invalid semaphore: " + json);
+            throw new JsonParseException("Invalid sensor: " + json);
         } catch (ClassCastException exception) {
-            throw new JsonParseException("Invalid semaphore: " + json, exception);
+            throw new JsonParseException("Invalid sensor: " + json, exception);
         }
     }
 }
