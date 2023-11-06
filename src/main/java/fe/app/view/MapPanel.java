@@ -42,6 +42,8 @@ public class MapPanel extends JPanel {
                 RenderingHints.VALUE_RENDER_QUALITY);
         g2.clearRect(0,0,this.getWidth(),this.getHeight());
 
+        paintStreetMap(g2);
+
         synchronized (this){
             if (this.vehicles!=null){
                 for (Vehicle v: new ArrayList<>(this.vehicles)) {
@@ -57,13 +59,15 @@ public class MapPanel extends JPanel {
 
                     Rectangle rect = new Rectangle(x0 - (VEHICLE_WIDTH/2),y0 - (VEHICLE_HEIGHT/2) ,
                             VEHICLE_WIDTH, VEHICLE_HEIGHT);
+
+                    g2.setColor(Color.BLACK);
+
                     g2.draw(rect);
                     g2.setTransform(saved);
 
                 }
             }
         }
-        paintStreetMap(g2);
     }
     @Override
     public String getToolTipText(MouseEvent e) {
@@ -90,6 +94,16 @@ public class MapPanel extends JPanel {
         streets.addAll(streetMap.getVerticalStreets());
 
         for (Street street : streets) {
+            g2.setColor(new Color(238,238,238));
+
+            if (Objects.equals(street.getType(), "HORIZONTAL")) {
+                g2.fillRect(street.getFirstSide().x1, street.getFirstSide().y1, this.getWidth(), Street.ROADWAY_SIZE);
+            } else {
+                g2.fillRect(street.getFirstSide().x1, street.getFirstSide().y1, Street.ROADWAY_SIZE, this.getHeight());
+
+            }
+            g2.setColor(Color.BLACK);
+
             street.getFirstSide().paint(g2);
             street.getSecondSide().paint(g2);
 
@@ -101,7 +115,7 @@ public class MapPanel extends JPanel {
         }
 
         for (Polygon intersection : streetMap.getStreetSidesIntersections()) {
-            g2.setColor(g2.getBackground());
+            g2.setColor(new Color(238,238,238));
             g2.drawPolygon(intersection);
         }
 
@@ -112,7 +126,6 @@ public class MapPanel extends JPanel {
 
             g2.fill(semaphore.getShape().getFirstSideShape());
             g2.fill(semaphore.getShape().getSecondSideShape());
-
         }
     }
 }
