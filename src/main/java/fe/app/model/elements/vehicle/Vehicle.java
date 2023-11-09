@@ -137,6 +137,20 @@ public class Vehicle extends Thread {
         this.intersectionCounter++;
 
         if (this.streetsIntersection.equals(this.streetMap.getStreetsIntersectionByPoint(position))) {
+/*            if (this.intersectionCounter == 2) {
+                if (Objects.equals(this.comingStreet.getType(), String.valueOf(StreetType.HORIZONTAL)) &&
+                Objects.equals(this.streetMap.getStreetById(newStreetWay.getStreetID()).getType(),
+                        String.valueOf(StreetType.VERTICAL))) {
+                    for (Vehicle vehicle : this.mapContext.getVehicles()) {
+                        if (vehicle.getPosition().getX() < position.getX() &&
+                            vehicle.getPosition().getX() > position.getX() + 30) {
+                            this.stop = true;
+                        } else {
+                            this.stop = false;
+                        }
+                    }
+                }
+            }*/
             if (this.intersectionCounter == 3) {
                 if (Objects.equals(this.comingStreet.getType(), String.valueOf(StreetType.HORIZONTAL)) &&
                         Objects.equals(this.streetMap.getStreetById(newStreetWay.getStreetID()).getType(),
