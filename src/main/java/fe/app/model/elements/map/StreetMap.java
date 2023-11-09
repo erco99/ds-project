@@ -50,10 +50,10 @@ public class StreetMap {
     public void create() {
         int distance = 0;
         for(int i = 0; i < HORIZONTAL_STREETS_NUMBER; i++) {
-            int newY = random.nextInt(MapDimension.MAP_HEIGHT / HORIZONTAL_STREETS_NUMBER - 250,
+            int newY = random.nextInt(MapDimension.MAP_HEIGHT / HORIZONTAL_STREETS_NUMBER - 200,
                         MapDimension.MAP_HEIGHT / HORIZONTAL_STREETS_NUMBER - 140);
             this.horizontalStreets.add(new Street("h"+i, MapDimension.MAP_WIDTH, MapDimension.MAP_HEIGHT, new Pair<>(0, newY+distance)));
-            distance += newY;
+            distance += newY + 100;
         }
         distance = 0;
         for(int i = 0; i < VERTICAL_STREETS_NUMBER; i++) {

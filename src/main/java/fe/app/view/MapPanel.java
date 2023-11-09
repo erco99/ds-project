@@ -50,7 +50,7 @@ public class MapPanel extends JPanel {
                     int x0 = v.getPosition().getX().intValue();
                     int y0 = v.getPosition().getY().intValue();
 
-                    streetAngle = v.getStreet().getType().equals("HORIZONTAL") ? 0 : 90;
+                    streetAngle = v.getStreet().getType().equals(StreetType.HORIZONTAL) ? 0 : 90;
 
                     final AffineTransform saved = g2.getTransform();
                     final AffineTransform rotate = AffineTransform.getRotateInstance(
@@ -96,7 +96,7 @@ public class MapPanel extends JPanel {
         for (Street street : streets) {
             g2.setColor(new Color(238,238,238));
 
-            if (Objects.equals(street.getType(), "HORIZONTAL")) {
+            if (Objects.equals(street.getType(), StreetType.HORIZONTAL)) {
                 g2.fillRect(street.getFirstSide().x1, street.getFirstSide().y1, this.getWidth(), Street.ROADWAY_SIZE);
             } else {
                 g2.fillRect(street.getFirstSide().x1, street.getFirstSide().y1, Street.ROADWAY_SIZE, this.getHeight());
@@ -107,7 +107,7 @@ public class MapPanel extends JPanel {
             street.getFirstSide().paint(g2);
             street.getSecondSide().paint(g2);
 
-            if (Objects.equals(street.getType(), StreetType.HORIZONTAL.toString())) {
+            if (Objects.equals(street.getType(), StreetType.HORIZONTAL)) {
                 g2.drawString(street.getId(), street.getFirstSide().x1 + 10, street.getFirstSide().y1 - 10);
             } else {
                 g2.drawString(street.getId(), street.getFirstSide().x1 - 20, street.getFirstSide().y1 + 20);

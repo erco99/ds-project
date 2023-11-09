@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class SensorsController extends Thread {
 
     private final MapContext mapContext;
-    private ArrayList<SensorsIntersection> sensorsIntersections;
+    private final ArrayList<SensorsIntersection> sensorsIntersections;
 
     public SensorsController(MapContext mapContext) {
         this.mapContext = mapContext;
@@ -29,7 +29,7 @@ public class SensorsController extends Thread {
             int hSensVehicles = 0;
             for (SensorsIntersection sensorIntersection : sensorsIntersections) {
                 for (Vehicle vehicle : this.mapContext.getVehicles()) {
-                    if (vehicle.getStreet().getType().equals(String.valueOf(StreetType.HORIZONTAL))) {
+                    if (vehicle.getStreet().getType().equals(StreetType.HORIZONTAL)) {
                         if (isInside(sensorIntersection.getHorizontalStreetSensor(), vehicle.getPosition().getX(), vehicle.getStreet())) {
                             vSensVehicles++;
                         }
@@ -57,14 +57,6 @@ public class SensorsController extends Thread {
         return position >= sensor.getStartingCoordinate()
                 && position <= sensor.getEndingCoordinate()
                 && sensor.getStreet() == street;
-    }
-
-    private void print() {
-        for (SensorsIntersection sensorIntersection : sensorsIntersections) {
-            System.out.println("horizontal " + sensorIntersection.getHorizontalStreetSensor().getVehiclesNumber());
-            System.out.println("vertical " + sensorIntersection.getVerticalStreetSensor().getVehiclesNumber());
-
-        }
     }
 
     public ArrayList<SensorsIntersection> getSensorsIntersections() {

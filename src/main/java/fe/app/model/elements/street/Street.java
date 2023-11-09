@@ -12,14 +12,14 @@ public class Street {
     private final Line secondSide;
     private final DirectionLine rightWay;
     private final DirectionLine leftWay;
-    private final String streetType;
+    private final StreetType streetType;
 
     public Street(String id, int width, int height, Pair<Integer, Integer> startingPoint) {
         this.id =  id;
 
         if(startingPoint.getX() == 0) {
             Integer y = startingPoint.getY();
-            this.streetType = String.valueOf(StreetType.HORIZONTAL);
+            this.streetType = StreetType.HORIZONTAL;
 
             firstSide = new Line(startingPoint.getX(), y, width, y);
             leftWay = new DirectionLine(this.id, new Pair<>(width, y + STREET_SIDE_DISTANCE),
@@ -30,7 +30,7 @@ public class Street {
                     new Pair<>(width, y + ROADWAY_SIZE - STREET_SIDE_DISTANCE));
         } else {
             Integer x = startingPoint.getX();
-            this.streetType = String.valueOf(StreetType.VERTICAL);
+            this.streetType = StreetType.VERTICAL;
 
             firstSide = new Line(x, startingPoint.getY(), x, height);
             rightWay = new DirectionLine(this.id, new Pair<>(x + STREET_SIDE_DISTANCE, 0),
@@ -58,7 +58,7 @@ public class Street {
         return leftWay;
     }
 
-    public String getType() {
+    public StreetType getType() {
         return streetType;
     }
     public String getId() {
