@@ -30,7 +30,9 @@ public class StreetMap {
     private final ArrayList<Street> verticalStreets;
     private final ArrayList<Polygon> streetSidesIntersections;
     private final ArrayList<StreetsIntersection> streetsIntersections;
-    private ArrayList<Semaphore> semaphores;
+    private final ArrayList<Pair<Integer,Integer>> streetIntersectionPoints;
+    private final ArrayList<Semaphore> semaphores;
+    private ArrayList<Pair<Integer,Integer>> semaphoresPoints;
     private SensorsController sensorsController;
     private Controller controller;
 
@@ -41,6 +43,8 @@ public class StreetMap {
         this.streetSidesIntersections = new ArrayList<>();
         this.streetsIntersections = new ArrayList<>();
         this.semaphores = new ArrayList<>();
+        this.streetIntersectionPoints = new ArrayList<>();
+        this.semaphoresPoints = new ArrayList<>();
     }
 
     public void create() {
@@ -88,7 +92,9 @@ public class StreetMap {
                 intersectionWays.add(new WaysIntersection(getIntersectionPoint(hRightWay,vLeftWay),hRightWay,vLeftWay));
                 intersectionWays.add(new WaysIntersection(getIntersectionPoint(hRightWay,vRightWay),hRightWay,vRightWay));
 
-                this.streetsIntersections.add(new StreetsIntersection(intersectionWays, hStreet, vStreet));
+                StreetsIntersection streetsIntersection = new StreetsIntersection(intersectionWays, hStreet, vStreet);
+                this.streetsIntersections.add(streetsIntersection);
+                this.streetIntersectionPoints.addAll(streetsIntersection.getAllPoints());
 
                 Polygon p = new Polygon();
                 p.addPoint(point.getX(), point.getY());
@@ -139,6 +145,9 @@ public class StreetMap {
                     this.semaphores.add(semaphoreOne);
                     this.semaphores.add(semaphoreTwo);
 
+                    this.semaphoresPoints.addAll(semaphoreOne.getPositions());
+                    this.semaphoresPoints.addAll(semaphoreTwo.getPositions());
+
                     this.sensorsController.addSensorIntersection(new SensorsIntersection(sensorHStreet, sensorVStreet));
 
                     semaphoresCouple.start();
@@ -168,7 +177,7 @@ public class StreetMap {
         return streetSidesIntersections;
     }
 
-    public ArrayList<StreetsIntersection> getIntersections() {
+    public ArrayList<StreetsIntersection> getStreetsIntersections() {
         return streetsIntersections;
     }
 
@@ -223,13 +232,15 @@ public class StreetMap {
         return allStreets.get(random.nextInt(0, allStreets.size()));
     }
 
-    public void turnGreen() {
-        for (Semaphore semaphore : this.semaphores) {
-            semaphore.setCurrentState(SemaphoreState.GREEN);
-        }
-    }
-
     public void setSensorsController(SensorsController sensorsController) {
         this.sensorsController = sensorsController;
+    }
+
+    public ArrayList<Pair<Integer, Integer>> getStreetIntersectionPoints() {
+        return streetIntersectionPoints;
+    }
+
+    public ArrayList<Pair<Integer, Integer>> getSemaphoresPoints() {
+        return semaphoresPoints;
     }
 }

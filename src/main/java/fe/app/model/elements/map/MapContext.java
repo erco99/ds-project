@@ -21,10 +21,6 @@ public class MapContext {
         agent.start();
     }
 
-    public synchronized void stopVehicles() {
-        this.vehicles.forEach(Vehicle::block);
-    }
-
     public ArrayList<Vehicle> getVehicles() {
         return this.vehicles;
     }

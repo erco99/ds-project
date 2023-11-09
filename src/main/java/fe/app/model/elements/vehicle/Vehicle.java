@@ -16,9 +16,9 @@ import java.util.Random;
 
 public class Vehicle extends Thread {
 
-    public static final double SAFETY_DISTANCE = 30;
-    public static final int RESTART_TIME = 500;
-    public double vehicleSpeed = 0.25;
+    private static final double SAFETY_DISTANCE = 30;
+    private static final int RESTART_TIME_MS = 500;
+    private static final double VEHICLE_SPEED = 0.25;
     private Pair<Double,Double> position;
     private boolean terminate;
     private boolean stop;
@@ -32,8 +32,6 @@ public class Vehicle extends Thread {
     private int xCoef = 0;
     private int yCoef = 0;
     private int direction = 1;
-    private ArrayList<Pair<Integer,Integer>> intersectionPoints = new ArrayList<>();
-    private ArrayList<Pair<Integer,Integer>> semaphorePoints = new ArrayList<>();
     private Random random = new Random();
     private DirectionLine streetWay;
 
@@ -41,13 +39,6 @@ public class Vehicle extends Thread {
         this.mapContext = mapContext;
         this.streetMap = streetMap;
         this.street = streetMap.getRandomStreet();
-
-        this.streetMap.getIntersections().forEach(streetsIntersection ->
-                this.intersectionPoints.addAll(streetsIntersection.getAllPoints()));
-
-        this.streetMap.getSemaphores().forEach(semaphore -> {
-            this.semaphorePoints.addAll(semaphore.getPositions());
-        });
 
         setAngle();
 
@@ -74,6 +65,7 @@ public class Vehicle extends Thread {
                 if (!this.stop) {
                     updatePosition();
                 }
+
                 // log("pos updated: "+pos);
                 Thread.sleep(5);
             }
@@ -83,10 +75,8 @@ public class Vehicle extends Thread {
     }
 
     private void updatePosition() {
-        this.position = new Pair<>(this.position.getX() + vehicleSpeed * xCoef * direction ,
-                this.position.getY() + vehicleSpeed * yCoef * direction);
-
-        //checkFront();
+        this.position = new Pair<>(this.position.getX() + VEHICLE_SPEED * xCoef * direction ,
+                this.position.getY() + VEHICLE_SPEED * yCoef * direction);
 
         if (isInIntersection(this.position)) {
             changeStreet(new Pair<>((int) Math.round(this.position.getX()), (int) Math.round(this.position.getY())));
@@ -94,29 +84,31 @@ public class Vehicle extends Thread {
     }
 
     private void checkIfGo() throws InterruptedException {
-        if (this.semaphorePoints.contains(Pair.toInteger(this.position)) &&
-                ((this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getCurrentState() == SemaphoreState.RED) ||
-                (this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getCurrentState() == SemaphoreState.YELLOW))) {
-            this.stop = true;
-        } else if (this.semaphorePoints.contains(Pair.toInteger(this.position)) &&
-                this.streetMap.getSemaphoreByPoint(Pair.toInteger(this.position)).getCurrentState() == SemaphoreState.GREEN) {
-            this.stop = false;
-        } else {
-            Pair<Double,Double> prova = new Pair<>(this.position.getX() + (vehicleSpeed + SAFETY_DISTANCE) * xCoef * direction,
-                    this.position.getY() + (vehicleSpeed + SAFETY_DISTANCE) * yCoef * direction);
-            double x = (double)Math.round(prova.getX());
-            double y= (double)Math.round(prova.getY());
+        Pair<Integer,Integer> integerPosition = Pair.toInteger(this.position);
 
-            if (this.mapContext.getAllPositions().contains(new Pair<>(x, y))) {
+        // check if current position is at a semaphore stop
+        // if true, stops if semaphore is red or yellow, goes on otherwise
+        // if false, check if there is a vehicle in front of itself
+        if (this.streetMap.getSemaphoresPoints().contains(integerPosition)) {
+            SemaphoreState currentState = this.streetMap.getSemaphoreByPoint(integerPosition).getCurrentState();
+            this.stop = currentState == SemaphoreState.RED || currentState == SemaphoreState.YELLOW;
+        } else {
+            Pair<Double,Double> frontPosition = new Pair<>(
+                    (double)Math.round(this.position.getX() + (VEHICLE_SPEED + SAFETY_DISTANCE) * xCoef * direction),
+                    (double)Math.round(this.position.getY() + (VEHICLE_SPEED + SAFETY_DISTANCE) * yCoef * direction)
+            );
+
+            if (this.mapContext.getAllPositions().contains(frontPosition)) {
                 this.stop = true;
                 this.behind = true;
             } else if (this.behind){
                 this.stop = false;
                 this.behind = false;
-                Thread.sleep(RESTART_TIME);
+                Thread.sleep(RESTART_TIME_MS);
             } else {
                 this.stop = false;
             }
+
         }
     }
 
@@ -137,20 +129,39 @@ public class Vehicle extends Thread {
         this.intersectionCounter++;
 
         if (this.streetsIntersection.equals(this.streetMap.getStreetsIntersectionByPoint(position))) {
-/*            if (this.intersectionCounter == 2) {
-                if (Objects.equals(this.comingStreet.getType(), String.valueOf(StreetType.HORIZONTAL)) &&
-                Objects.equals(this.streetMap.getStreetById(newStreetWay.getStreetID()).getType(),
-                        String.valueOf(StreetType.VERTICAL))) {
+            if (this.intersectionCounter == 2) {
+                /*if (Objects.equals(this.comingStreet.getType(), String.valueOf(StreetType.HORIZONTAL)) &&
+                        Objects.equals(this.streetMap.getStreetById(newStreetWay.getStreetID()).getType(),
+                                String.valueOf(StreetType.VERTICAL))) {
                     for (Vehicle vehicle : this.mapContext.getVehicles()) {
-                        if (vehicle.getPosition().getX() < position.getX() &&
-                            vehicle.getPosition().getX() > position.getX() + 30) {
-                            this.stop = true;
-                        } else {
-                            this.stop = false;
+                        if (vehicle.getPosition().getX() >= position.getX() &&
+                                vehicle.getPosition().getX() < position.getX() + 30) {
+                            for (DirectionLine way : intersectedWays) {
+                                if (Objects.equals(this.streetMap.getStreetById(way.getStreetID()).getType(),
+                                        String.valueOf(StreetType.HORIZONTAL))) {
+                                    newStreetWay = way;
+                                }
+                            }
+                            break;
                         }
                     }
-                }
-            }*/
+                } else if (Objects.equals(this.comingStreet.getType(), String.valueOf(StreetType.VERTICAL)) &&
+                        Objects.equals(this.streetMap.getStreetById(newStreetWay.getStreetID()).getType(),
+                                String.valueOf(StreetType.HORIZONTAL))) {
+                    for (Vehicle vehicle : this.mapContext.getVehicles()) {
+                        if (vehicle.getPosition().getY() <= position.getY() &&
+                                vehicle.getPosition().getY() > position.getY() - 30) {
+                            for (DirectionLine way : intersectedWays) {
+                                if (Objects.equals(this.streetMap.getStreetById(way.getStreetID()).getType(),
+                                        String.valueOf(StreetType.VERTICAL))) {
+                                    newStreetWay = way;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }*/
+            }
             if (this.intersectionCounter == 3) {
                 if (Objects.equals(this.comingStreet.getType(), String.valueOf(StreetType.HORIZONTAL)) &&
                         Objects.equals(this.streetMap.getStreetById(newStreetWay.getStreetID()).getType(),
@@ -202,7 +213,7 @@ public class Vehicle extends Thread {
     }
 
     private boolean isInIntersection(Pair<Double,Double> point) {
-        for (Pair<Integer,Integer> ip : this.intersectionPoints) {
+        for (Pair<Integer,Integer> ip : this.streetMap.getStreetIntersectionPoints()) {
             if (Math.abs(point.getX() - ip.getX()) < 0.01 && Math.abs(point.getY() - ip.getY()) < 0.01) {
                 return true;
             }
@@ -210,24 +221,8 @@ public class Vehicle extends Thread {
         return false;
     }
 
-    private void checkFront() {
-        Pair<Double,Double> prova = new Pair<>(this.position.getX() + (vehicleSpeed + SAFETY_DISTANCE) * xCoef * direction,
-                this.position.getY() + (vehicleSpeed + SAFETY_DISTANCE) * yCoef * direction);
-        double x = (double)Math.round(prova.getX());
-        double y= (double)Math.round(prova.getY());
-
-        if (this.mapContext.getAllPositions().contains(new Pair<>(x,y))) {
-            System.out.println("stop");
-            this.stop = true;
-        }
-    }
-
     public void terminate() {
         this.terminate = true;
-    }
-
-    public void block() {
-        this.stop = true;
     }
 
     public Pair<Double, Double> getPosition() {

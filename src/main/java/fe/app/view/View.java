@@ -24,7 +24,7 @@ public class View {
         frame = new JFrame("App");
         frame.setLayout(new BorderLayout());
 
-        frame.setBackground(Color.LIGHT_GRAY);
+        frame.setBackground(new Color(205, 210, 214));
 
         mapPanel = new MapPanel(streetMap, new Dimension(MapDimension.MAP_WIDTH, MapDimension.MAP_HEIGHT));
         frame.add(mapPanel, BorderLayout.CENTER);
