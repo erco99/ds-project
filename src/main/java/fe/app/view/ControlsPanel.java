@@ -41,7 +41,7 @@ public class ControlsPanel extends JPanel implements ActionListener {
 
         this.add(new JLabel("Set number of vehicles:"));
 
-        SpinnerModel value = new SpinnerNumberModel(10,1,30,1);
+        SpinnerModel value = new SpinnerNumberModel(10,1,60,1);
         this.vehiclesNumberSpinner = new JSpinner(value);
         this.vehiclesNumberSpinner.setSize(30,100);
         this.add(this.vehiclesNumberSpinner);

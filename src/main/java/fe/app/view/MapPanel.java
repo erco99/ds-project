@@ -29,6 +29,7 @@ public class MapPanel extends JPanel {
         setToolTipText("");
         this.streetMap = streetMap;
         this.panelDimension = dimension;
+
         streetMap.create();
         this.setPreferredSize(dimension);
     }
