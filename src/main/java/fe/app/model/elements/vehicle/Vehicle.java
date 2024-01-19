@@ -38,7 +38,8 @@ public class Vehicle extends Thread {
     public Vehicle(MapContext mapContext, StreetMap streetMap) {
         this.mapContext = mapContext;
         this.streetMap = streetMap;
-        this.street = streetMap.getRandomStreet();
+
+        this.street = (random.nextInt(100) < 80) ? streetMap.getRandomHorizontalStreet() : streetMap.getRandomVerticalStreet();
 
         streetWay = (random.nextBoolean()) ? street.getRightWay() : street.getLeftWay();
         this.position = new Pair<>(

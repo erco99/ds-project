@@ -226,10 +226,12 @@ public class StreetMap {
         }
         return null;
     }
-    public Street getRandomStreet() {
-        ArrayList<Street> allStreets = new ArrayList<>(this.horizontalStreets);
-        allStreets.addAll(this.verticalStreets);
-        return allStreets.get(random.nextInt(0, allStreets.size()));
+    public Street getRandomVerticalStreet() {
+        return this.verticalStreets.get(random.nextInt(0, this.verticalStreets.size()));
+    }
+
+    public Street getRandomHorizontalStreet() {
+        return this.horizontalStreets.get(random.nextInt(0, this.horizontalStreets.size()));
     }
 
     public void setSensorsController(SensorsController sensorsController) {
