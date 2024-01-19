@@ -7,6 +7,7 @@ import fe.app.model.tfmanagement.presentation.*;
 import fe.app.util.GsonUtils;
 import fe.app.util.Pair;
 
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.util.Map;
 
@@ -46,7 +47,7 @@ public class SemaphoresCouple extends Thread {
         try {
             while (true) {
                 sendTimingsRequest();
-                sleep(5000);
+                sleep(50000);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,9 +55,20 @@ public class SemaphoresCouple extends Thread {
     }
 
     public void sendTimingsRequest() {
-        timeMap = clientHandler.rpc(
-                new TimingsRequest(new Pair<>(hStreetSemaphore.getId(), vStreetSemaphore.getId())),
-                TimingsResponse.class);
+        try {
+            timeMap = clientHandler.rpc(
+                    new TimingsRequest(new Pair<>(hStreetSemaphore.getId(), vStreetSemaphore.getId())),
+                    TimingsResponse.class);
+        } catch (IllegalStateException e) {
+            timeMap.put(hStreetSemaphore.getId(), 20.0);
+            timeMap.put(vStreetSemaphore.getId(), 20.0);
+        }
+
+        if (timeMap.containsValue(null)) {
+            timeMap.put(hStreetSemaphore.getId(), 20.0);
+            timeMap.put(vStreetSemaphore.getId(), 20.0);
+        }
+
         controller.updateViewTimingsTable(timeMap);
     }
 
