@@ -19,3 +19,12 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+task runServer(type: JavaExec) {
+    main = 'fe.app.model.tfmanagement.server.Server'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task runApp(type: JavaExec) {
+    main = 'fe.app.Main'
+    classpath = sourceSets.main.runtimeClasspath
+}
