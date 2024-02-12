@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.swing.plaf.TableHeaderUI;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -131,7 +132,7 @@ public class TestSystem {
     public void testAutonomousModeAfterCrash() throws InterruptedException {
         new Thread(() -> {
             try {
-                server = new Server( new ServerSocket(PORT),  new InetSocketAddress("localhost", PORT),"main", PORT);
+                server = new Server( new ServerSocket(2009),  new InetSocketAddress("localhost", 2009),"main", 2009);
                 server.startServerAsMain();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -152,7 +153,7 @@ public class TestSystem {
                 StreetType.VERTICAL,
                 "S" +2);
 
-        SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, null);
+        SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, null, 2009);
         semaphoresCouple.start();
 
         Thread.sleep(3000);

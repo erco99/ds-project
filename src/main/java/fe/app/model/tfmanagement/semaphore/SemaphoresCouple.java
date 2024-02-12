@@ -23,6 +23,13 @@ public class SemaphoresCouple extends Thread {
     private Controller controller;
     private String mode = "autonomous";
 
+    public SemaphoresCouple(Semaphore hStreetSemaphore, Semaphore vStreetSemaphore, Controller controller, int port) {
+        this.hStreetSemaphore = hStreetSemaphore;
+        this.vStreetSemaphore = vStreetSemaphore;
+        this.socket = new InetSocketAddress("localhost", port);
+        this.gson = GsonUtils.createGson();
+        this.controller = controller;
+    }
     public SemaphoresCouple(Semaphore hStreetSemaphore, Semaphore vStreetSemaphore, Controller controller) {
         this.hStreetSemaphore = hStreetSemaphore;
         this.vStreetSemaphore = vStreetSemaphore;
