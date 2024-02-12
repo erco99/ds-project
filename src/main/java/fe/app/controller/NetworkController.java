@@ -15,6 +15,7 @@ public class NetworkController extends Thread {
     private final Gson gson;
     private int PORT = 2000;
     private final InetSocketAddress socket;
+
     private boolean isServerUp = true;
     private ClientHandler clientHandler;
 
@@ -61,4 +62,9 @@ public class NetworkController extends Thread {
         }
         this.view.getControlsPanel().changeServerStatus(this.isServerUp);
     }
+
+    public boolean isServerUp() {
+        return isServerUp;
+    }
+
 }

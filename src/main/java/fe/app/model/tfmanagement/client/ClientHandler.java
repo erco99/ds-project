@@ -7,6 +7,7 @@ import fe.app.model.tfmanagement.presentation.Response;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
@@ -19,7 +20,7 @@ public class ClientHandler {
         this.gson = gson;
     }
 
-    public <T, R> R rpc(Request<T> request, Class<? extends Response<R>> responseType) {
+    public <T, R> R rpc(Request<T> request, Class<? extends Response<R>> responseType) throws ConnectException {
         try (var socket = new Socket()) {
             socket.connect(this.socket);
             marshallRequest(socket, request);

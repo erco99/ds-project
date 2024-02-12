@@ -16,7 +16,6 @@ public class ServerHandler extends Thread {
     private final Gson gson;
     private final TimingProcessor timingProcessor;
 
-
     public ServerHandler(Socket socket, TimingProcessor timingProcessor) {
         this.socket = Objects.requireNonNull(socket);
         this.timingProcessor = timingProcessor;

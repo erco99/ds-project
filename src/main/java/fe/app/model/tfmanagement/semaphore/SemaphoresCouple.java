@@ -21,6 +21,7 @@ public class SemaphoresCouple extends Thread {
     private final Gson gson;
     private Map<String, Double> timeMap;
     private Controller controller;
+    private String mode = "autonomous";
 
     public SemaphoresCouple(Semaphore hStreetSemaphore, Semaphore vStreetSemaphore, Controller controller) {
         this.hStreetSemaphore = hStreetSemaphore;
@@ -32,9 +33,13 @@ public class SemaphoresCouple extends Thread {
 
     public void run() {
         this.clientHandler = new ClientHandler(this.socket, this.gson);
-        timeMap = clientHandler.rpc(
-                new TimingsRequest(new Pair<>(hStreetSemaphore.getId(), vStreetSemaphore.getId())),
-                TimingsResponse.class);
+        try {
+            timeMap = clientHandler.rpc(
+                    new TimingsRequest(new Pair<>(hStreetSemaphore.getId(), vStreetSemaphore.getId())),
+                    TimingsResponse.class);
+        } catch (ConnectException e) {
+            throw new RuntimeException(e);
+        }
         if (timeMap.containsValue(null)) {
             timeMap.put(hStreetSemaphore.getId(), 20.0);
             timeMap.put(vStreetSemaphore.getId(), 20.0);
@@ -59,7 +64,9 @@ public class SemaphoresCouple extends Thread {
             timeMap = clientHandler.rpc(
                     new TimingsRequest(new Pair<>(hStreetSemaphore.getId(), vStreetSemaphore.getId())),
                     TimingsResponse.class);
-        } catch (IllegalStateException e) {
+            mode = "remote";
+        } catch (IllegalStateException | ConnectException e) {
+            mode = "autonomous";
             timeMap.put(hStreetSemaphore.getId(), 20.0);
             timeMap.put(vStreetSemaphore.getId(), 20.0);
         }
@@ -69,7 +76,11 @@ public class SemaphoresCouple extends Thread {
             timeMap.put(vStreetSemaphore.getId(), 20.0);
         }
 
-        controller.updateViewTimingsTable(timeMap);
+        try {
+            controller.updateViewTimingsTable(timeMap);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     private void startStateCycle() {
@@ -107,4 +118,14 @@ public class SemaphoresCouple extends Thread {
             }
         }).start();
     }
+
+    public Map<String, Double> getTimeMap() {
+        return timeMap;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+
 }

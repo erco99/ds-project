@@ -14,7 +14,7 @@ import java.net.SocketException;
 
 public class Server {
 
-    public static final int PORT = 2000;
+    public int port;
     private ServerSocket serverSocket;
     private InetSocketAddress socket;
     private TimingProcessor timingProcessor = new TimingProcessor();
@@ -22,7 +22,8 @@ public class Server {
     private String serverType;
     private boolean crashed = false;
 
-    public Server(ServerSocket serverSocket, InetSocketAddress socket, String serverType) {
+    public Server(ServerSocket serverSocket, InetSocketAddress socket, String serverType, int port) {
+        this.port = port;
         this.serverSocket = serverSocket;
         this.socket = socket;
 
@@ -32,13 +33,13 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        InetSocketAddress socket = new InetSocketAddress("localhost", PORT);
+        InetSocketAddress socket = new InetSocketAddress("localhost", 2000);
         try {
-            ServerSocket serverSocket = new ServerSocket(PORT);
-            Server server = new Server(serverSocket, socket, "main");
+            ServerSocket serverSocket = new ServerSocket(2000);
+            Server server = new Server(serverSocket, socket, "MAIN", 2000);
             server.startServerAsMain();
         } catch (Exception e) {
-            Server server = new Server(null, socket, "backup");
+            Server server = new Server(null, socket, "BACKUP", 2000);
             server.startServerAsBackup();
         }
 
@@ -46,8 +47,9 @@ public class Server {
 
     public void startServerAsMain() throws IOException, InterruptedException {
         serverView.setServerType("MAIN");
+        serverType = "MAIN";
         if (serverSocket == null) {
-            serverSocket = new ServerSocket(PORT);
+            serverSocket = new ServerSocket(port);
         }
         try {
             while (!serverSocket.isClosed()) {
@@ -56,7 +58,7 @@ public class Server {
                 ServerHandler serverHandler = new ServerHandler(socket, timingProcessor);
                 serverHandler.start();
                 System.out.printf("Accepted connection from: %s, on local port %d\n",
-                        socket.getRemoteSocketAddress(), PORT);
+                        socket.getRemoteSocketAddress(), port);
             }
         } catch (SocketException e) {
             System.out.println("CRASHATO");
@@ -66,6 +68,7 @@ public class Server {
 
     public void startServerAsBackup() throws IOException, InterruptedException {
         serverView.setServerType("BACKUP");
+        serverType = "BACKUP";
         ClientHandler backupServerHandler = new ClientHandler(socket, GsonUtils.createGson());
         while (!crashed) {
             try {
@@ -88,7 +91,7 @@ public class Server {
             crashState();
         } else {
             System.out.println("starto coem main");
-            serverSocket = new ServerSocket(PORT);
+            serverSocket = new ServerSocket(port);
             startServerAsMain();
         }
     }
@@ -103,7 +106,7 @@ public class Server {
         System.out.println("ESCO");
 
         try {
-            serverSocket = new ServerSocket(PORT);
+            serverSocket = new ServerSocket(port);
             startServerAsMain();
         } catch (SocketException e) {
             System.out.println("erorkeork3'04if0'43f");
@@ -121,7 +124,7 @@ public class Server {
         this.crashed = false;
     }
 
-    private void closeServerSocket() {
+    public void closeServerSocket() {
         try {
             if (this.serverSocket != null) {
                 this.serverSocket.close();

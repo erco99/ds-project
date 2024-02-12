@@ -46,7 +46,7 @@ public class TimingProcessor {
         System.out.println(timings);
     }
 
-    private  double timeAlgorithm(int vehicles, int tot) {
+    private double timeAlgorithm(int vehicles, int tot) {
         int rawTime = (vehicles * semaphoreCycleTime ) / tot;
         int timeLimit = semaphoreCycleTime/2 + timeThreshold;
 
@@ -65,6 +65,10 @@ public class TimingProcessor {
         tempMap.put(semaphoresIds.getX(), timings.get(semaphoresIds.getX()));
         tempMap.put(semaphoresIds.getY(), timings.get(semaphoresIds.getY()));
         return tempMap;
+    }
+
+    public Map<String, Double> getTimings() {
+        return timings;
     }
 
 }
