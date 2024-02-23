@@ -5,9 +5,9 @@ import fe.app.util.Pair;
 
 public class DirectionLine extends Line {
 
-    private Pair<Integer, Integer> startingPoint;
-    private Pair<Integer, Integer> endingPoint;
-    private String streetID;
+    private final Pair<Integer, Integer> startingPoint;
+    private final Pair<Integer, Integer> endingPoint;
+    private final String streetID;
 
     public DirectionLine(String streetID, Pair<Integer, Integer> startingPoint, Pair<Integer,Integer> endingPoint) {
         super(startingPoint.getX(), startingPoint.getY(), endingPoint.getX(), endingPoint.getY());

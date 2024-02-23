@@ -9,7 +9,7 @@ public class ServerView implements ActionListener {
 
     static JFrame frame;
     static JPanel panel;
-    private Server server;
+    private final Server server;
     private JButton serverType;
     private JButton crashButton;
     private JButton stateButton;

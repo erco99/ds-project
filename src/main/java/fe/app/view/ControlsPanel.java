@@ -21,17 +21,13 @@ public class ControlsPanel extends JPanel implements ActionListener {
     private final JButton stopButton;
     private final JButton serverStatusButton;
     private final DefaultTableModel sensorsTableModel;
-    private final JTable sensorsTable;
     private final DefaultTableModel timingsTableModel;
-    private final JTable timingsTable;
     private final JSpinner vehiclesNumberSpinner;
     private final Controller controller;
-    private Dimension panelDimension;
-    private Map<String,Double> timings = new HashMap<>();
+    private final Map<String,Double> timings = new HashMap<>();
 
     public ControlsPanel(Controller controller, Dimension dimension) {
         this.controller = controller;
-        this.panelDimension = dimension;
 
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.setPreferredSize(dimension);
@@ -69,7 +65,7 @@ public class ControlsPanel extends JPanel implements ActionListener {
 
         String[] columnNames = {"Street", "Semaphore", "Vehicles"};
         this.sensorsTableModel = new DefaultTableModel(columnNames, 0);
-        this.sensorsTable = new JTable(sensorsTableModel);
+        JTable sensorsTable = new JTable(sensorsTableModel);
 
         JScrollPane scrollPane = new JScrollPane(sensorsTable);
         this.add(scrollPane);
@@ -81,7 +77,7 @@ public class ControlsPanel extends JPanel implements ActionListener {
 
         columnNames = new String[]{"Semaphore", "Green", "Red"};
         this.timingsTableModel = new DefaultTableModel(columnNames, 0);
-        this.timingsTable = new JTable(timingsTableModel);
+        JTable timingsTable = new JTable(timingsTableModel);
 
         JScrollPane scrollPaneTimings = new JScrollPane(timingsTable);
         this.add(scrollPaneTimings);

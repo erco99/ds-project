@@ -8,9 +8,9 @@ import java.util.Objects;
 
 public class StreetsIntersection {
 
-    private ArrayList<WaysIntersection> intersectionWays;
-    private Street horizontalStreet;
-    private Street verticalStreet;
+    private final ArrayList<WaysIntersection> intersectionWays;
+    private final Street horizontalStreet;
+    private final Street verticalStreet;
 
     public StreetsIntersection(ArrayList<WaysIntersection> intersectionWays, Street horizontalStreet, Street verticalStreet) {
         this.intersectionWays = intersectionWays;
@@ -21,7 +21,6 @@ public class StreetsIntersection {
     public ArrayList<WaysIntersection> getIntersectionWays() {
         return intersectionWays;
     }
-
 
     public ArrayList<Pair<Integer,Integer>> getAllPoints() {
         ArrayList<Pair<Integer,Integer>> points = new ArrayList<>();

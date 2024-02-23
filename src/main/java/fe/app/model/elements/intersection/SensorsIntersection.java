@@ -4,8 +4,8 @@ import fe.app.model.elements.map.Sensor;
 
 public class SensorsIntersection {
 
-    private Sensor horizontalStreetSensor;
-    private Sensor verticalStreetSensor;
+    private final Sensor horizontalStreetSensor;
+    private final Sensor verticalStreetSensor;
 
     public SensorsIntersection(Sensor horizontalStreetSensor, Sensor verticalStreetSensor) {
         this.horizontalStreetSensor = horizontalStreetSensor;

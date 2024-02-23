@@ -9,10 +9,8 @@ import java.util.Map;
 
 public class Controller {
 
-    private StreetMap streetMap;
+    public static final int PORT = 2000;
     private MapContext mapContext;
-    private NetworkController networkController;
-    private SensorsController sensorsController;
     private View view;
     private TrafficController trafficController;
 
@@ -20,26 +18,25 @@ public class Controller {
     }
 
     public void start() {
+         this.view = new View();
 
-        this.view = new View();
-
-        this.streetMap = new StreetMap(this);
+        StreetMap streetMap = new StreetMap(this);
         this.mapContext = new MapContext(streetMap);
 
-        this.sensorsController = new SensorsController(mapContext);
-        this.networkController = new NetworkController(view, sensorsController);
+        SensorsController sensorsController = new SensorsController(mapContext);
+        NetworkController networkController = new NetworkController(view, sensorsController, PORT);
 
-        this.streetMap.setSensorsController(this.sensorsController);
+        streetMap.setSensorsController(sensorsController);
         this.view.setController(this);
-        this.view.setNetworkController(this.networkController);
+        this.view.setNetworkController(networkController);
 
         this.view.start(streetMap);
 
         VehicleViewer vehicleViewer = new VehicleViewer(view.getMapPanel(), mapContext);
         vehicleViewer.start();
 
-        this.networkController.start();
-        this.sensorsController.start();
+        networkController.start();
+        sensorsController.start();
     }
 
     public void startTraffic(int vehiclesNumber) {
@@ -56,6 +53,4 @@ public class Controller {
             view.getControlsPanel().updateTimingsTable(timeMap);
         }
     }
-
-
 }

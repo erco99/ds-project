@@ -12,10 +12,10 @@ public class Semaphore {
     public static final int CYCLE_TIME = 40;
     public static final int YELLOW_TIME = 4;
     private SemaphoreState state;
-    private Pair<Integer,Integer> firstSidePosition;
-    private Pair<Integer,Integer> secondSidePosition;
-    private StreetType streetType;
-    private String id;
+    private final Pair<Integer,Integer> firstSidePosition;
+    private final Pair<Integer,Integer> secondSidePosition;
+    private final StreetType streetType;
+    private final String id;
     private SemaphoreShape shape;
 
     public Semaphore(SemaphoreState state,

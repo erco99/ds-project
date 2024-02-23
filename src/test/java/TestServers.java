@@ -1,5 +1,4 @@
 import fe.app.model.tfmanagement.server.Server;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,18 +13,18 @@ public class TestServers {
 
     private static Server first_server;
     private static Server second_server;
-    private static int PORT = 2001;
+    private static int port = 2010;
 
     @BeforeEach
     public void beforeEach() {
-        PORT++;
+        port++;
     }
 
     @Test
     public void testBackupBecomesMain() throws InterruptedException {
         new Thread(() -> {
             try {
-                first_server = new Server( new ServerSocket(PORT),  new InetSocketAddress("localhost", PORT),"MAIN", PORT);
+                first_server = new Server( new ServerSocket(port),  new InetSocketAddress("localhost", port),"MAIN", port);
                 first_server.startServerAsMain();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -36,7 +35,7 @@ public class TestServers {
 
         new Thread(() -> {
             try {
-                second_server = new Server( null,  new InetSocketAddress("localhost", PORT),"BACKUP", PORT);
+                second_server = new Server( null,  new InetSocketAddress("localhost", port),"BACKUP", port);
                 second_server.startServerAsBackup();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -62,7 +61,7 @@ public class TestServers {
     public void testMainBecomesBackupAfterRestart() throws InterruptedException {
         new Thread(() -> {
             try {
-                first_server = new Server( new ServerSocket(PORT),  new InetSocketAddress("localhost", PORT),"MAIN", PORT);
+                first_server = new Server( new ServerSocket(port),  new InetSocketAddress("localhost", port),"MAIN", port);
                 first_server.startServerAsMain();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -73,7 +72,7 @@ public class TestServers {
 
         new Thread(() -> {
             try {
-                second_server = new Server( null,  new InetSocketAddress("localhost", PORT),"BACKUP", PORT);
+                second_server = new Server( null,  new InetSocketAddress("localhost", port),"BACKUP", port);
                 second_server.startServerAsBackup();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -104,7 +103,7 @@ public class TestServers {
     public void testBackupCrashWhenMainOn() throws InterruptedException {
         new Thread(() -> {
             try {
-                first_server = new Server( new ServerSocket(PORT),  new InetSocketAddress("localhost", PORT),"MAIN", PORT);
+                first_server = new Server( new ServerSocket(port),  new InetSocketAddress("localhost", port),"MAIN", port);
                 first_server.startServerAsMain();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -115,7 +114,7 @@ public class TestServers {
 
         new Thread(() -> {
             try {
-                second_server = new Server( null,  new InetSocketAddress("localhost", PORT),"BACKUP", PORT);
+                second_server = new Server( null,  new InetSocketAddress("localhost", port),"BACKUP", port);
                 second_server.startServerAsBackup();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -141,7 +140,7 @@ public class TestServers {
     public void testMainCrashWhenBackupDown() throws InterruptedException {
         new Thread(() -> {
             try {
-                first_server = new Server( new ServerSocket(PORT),  new InetSocketAddress("localhost", PORT),"MAIN", PORT);
+                first_server = new Server( new ServerSocket(port),  new InetSocketAddress("localhost", port),"MAIN", port);
                 first_server.startServerAsMain();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -152,7 +151,7 @@ public class TestServers {
 
         new Thread(() -> {
             try {
-                second_server = new Server( null,  new InetSocketAddress("localhost", PORT),"BACKUP", PORT);
+                second_server = new Server( null,  new InetSocketAddress("localhost", port),"BACKUP", port);
                 second_server.startServerAsBackup();
             } catch (IOException e) {
                 throw new RuntimeException(e);

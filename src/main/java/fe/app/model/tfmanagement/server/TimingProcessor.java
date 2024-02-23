@@ -12,9 +12,7 @@ import java.util.Map;
 public class TimingProcessor {
 
     private final int semaphoreCycleTime = Semaphore.CYCLE_TIME;
-    private final int timeThreshold = 10;
-    private final double maxExcessPerc = 0.5;
-    private Map<String, Double> timings = new HashMap<>();
+    private final Map<String, Double> timings = new HashMap<>();
 
     public TimingProcessor() {
     }
@@ -48,13 +46,15 @@ public class TimingProcessor {
 
     private double timeAlgorithm(int vehicles, int tot) {
         int rawTime = (vehicles * semaphoreCycleTime ) / tot;
+        int timeThreshold = 10;
         int timeLimit = semaphoreCycleTime/2 + timeThreshold;
 
         if (rawTime > timeLimit) {
             int excess = rawTime - timeLimit;
             int weight = vehicles * (1 / tot);
 
-            return (rawTime - excess) + (excess * weight * maxExcessPerc);
+            double maxExcessPercentage = 0.5;
+            return (rawTime - excess) + (excess * weight * maxExcessPercentage);
         } else {
             return rawTime;
         }

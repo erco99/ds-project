@@ -5,9 +5,9 @@ import fe.app.util.Pair;
 
 public class WaysIntersection {
 
-    private Pair<Integer,Integer> point;
-    private DirectionLine firstWay;
-    private DirectionLine secondWay;
+    private final Pair<Integer,Integer> point;
+    private final DirectionLine firstWay;
+    private final DirectionLine secondWay;
 
     public WaysIntersection(Pair<Integer,Integer> point, DirectionLine firstWay, DirectionLine secondWay) {
         this.point = point;

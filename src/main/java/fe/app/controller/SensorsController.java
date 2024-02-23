@@ -46,6 +46,7 @@ public class SensorsController extends Thread {
                 hSensVehicles = 0;
             }
             try {
+                //noinspection BusyWait
                 sleep(3000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

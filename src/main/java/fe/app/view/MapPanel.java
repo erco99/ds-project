@@ -20,15 +20,12 @@ public class MapPanel extends JPanel {
 
     public static final int VEHICLE_WIDTH = 20;
     public static final int VEHICLE_HEIGHT = 10;
-    private Dimension panelDimension;
-    private int streetAngle;
     private ArrayList<Vehicle> vehicles;
-    private StreetMap streetMap;
+    private final StreetMap streetMap;
 
     public MapPanel(StreetMap streetMap, Dimension dimension) {
         setToolTipText("");
         this.streetMap = streetMap;
-        this.panelDimension = dimension;
 
         streetMap.create();
         this.setPreferredSize(dimension);
@@ -51,7 +48,7 @@ public class MapPanel extends JPanel {
                     int x0 = v.getPosition().getX().intValue();
                     int y0 = v.getPosition().getY().intValue();
 
-                    streetAngle = v.getStreet().getType().equals(StreetType.HORIZONTAL) ? 0 : 90;
+                    int streetAngle = v.getStreet().getType().equals(StreetType.HORIZONTAL) ? 0 : 90;
 
                     final AffineTransform saved = g2.getTransform();
                     final AffineTransform rotate = AffineTransform.getRotateInstance(

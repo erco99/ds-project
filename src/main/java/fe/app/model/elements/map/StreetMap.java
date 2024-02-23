@@ -25,6 +25,7 @@ public class StreetMap {
     private static final int HORIZONTAL_STREETS_NUMBER = 2;
     private static final int VERTICAL_STREETS_NUMBER = 3;
     public static final int SEMAPHORE_DISTANCE = 50;
+    public static final int PORT = 2000;
     private final Random random = new Random();
     private final ArrayList<Street> horizontalStreets;
     private final ArrayList<Street> verticalStreets;
@@ -32,9 +33,9 @@ public class StreetMap {
     private final ArrayList<StreetsIntersection> streetsIntersections;
     private final ArrayList<Pair<Integer,Integer>> streetIntersectionPoints;
     private final ArrayList<Semaphore> semaphores;
-    private ArrayList<Pair<Integer,Integer>> semaphoresPoints;
+    private final ArrayList<Pair<Integer,Integer>> semaphoresPoints;
     private SensorsController sensorsController;
-    private Controller controller;
+    private final Controller controller;
 
     public StreetMap(Controller controller) {
         this.controller = controller;
@@ -129,7 +130,7 @@ public class StreetMap {
                             StreetType.VERTICAL,
                             "S" + ++semaphoreCounter);
 
-                    SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, controller);
+                    SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, controller, PORT);
 
                     Sensor sensorHStreet = new Sensor(point.getX() - Sensor.DISTANCE_COVERED,
                             point.getX() + Street.STREET_SIDE_DISTANCE + Sensor.DISTANCE_COVERED,

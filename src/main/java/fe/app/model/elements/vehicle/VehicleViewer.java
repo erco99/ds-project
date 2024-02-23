@@ -6,18 +6,16 @@ import fe.app.view.MapPanel;
 public class VehicleViewer extends Thread {
 
     private static final int FRAMES_PER_SEC = 30;
-    private boolean stop;
-    private MapPanel mapPanel;
-    private MapContext mapContext;
+    private final MapPanel mapPanel;
+    private final MapContext mapContext;
 
     public VehicleViewer(MapPanel mapPanel, MapContext mapContext) {
-        this.stop = false;
         this.mapPanel = mapPanel;
         this.mapContext = mapContext;
     }
 
     public void run() {
-        while (!stop) {
+        while (true) {
             long t0 = System.currentTimeMillis();
             mapPanel.updateVehiclesPosition(mapContext.getVehicles());
             long t1 = System.currentTimeMillis();
@@ -25,8 +23,10 @@ public class VehicleViewer extends Thread {
             long dt = (1000 / FRAMES_PER_SEC) - (t1-t0);
             if (dt > 0){
                 try {
+                    //noinspection BusyWait
                     Thread.sleep(dt);
-                } catch (Exception ex){
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }

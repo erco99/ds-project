@@ -6,10 +6,10 @@ import fe.app.model.tfmanagement.semaphore.Semaphore;
 public class Sensor {
 
     public static final int DISTANCE_COVERED = 100;
-    private int startingCoordinate;
-    private int endingCoordinate;
-    private Semaphore semaphore;
-    private Street street;
+    private final int startingCoordinate;
+    private final int endingCoordinate;
+    private final Semaphore semaphore;
+    private final Street street;
     private int vehiclesNumber;
 
     public Sensor(int startingCoordinate, int endingCoordinate, Semaphore semaphore, Street street) {

@@ -13,16 +13,14 @@ public class NetworkController extends Thread {
     private final View view;
     private final SensorsController sensorsController;
     private final Gson gson;
-    private int PORT = 2000;
     private final InetSocketAddress socket;
-
     private boolean isServerUp = true;
     private ClientHandler clientHandler;
 
-    public NetworkController(View view, SensorsController sensorsController) {
+    public NetworkController(View view, SensorsController sensorsController, int port) {
         this.view = view;
         this.sensorsController = sensorsController;
-        this.socket = new InetSocketAddress("localhost", PORT);
+        this.socket = new InetSocketAddress("localhost", port);
         this.gson = GsonUtils.createGson();
     }
 
@@ -35,6 +33,7 @@ public class NetworkController extends Thread {
                 this.view.getControlsPanel().setSensorsLabel(sensorsController.getSensorsIntersections());
             }
             try {
+                //noinspection BusyWait
                 Thread.sleep(4000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

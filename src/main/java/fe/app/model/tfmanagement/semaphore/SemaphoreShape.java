@@ -7,13 +7,13 @@ import java.awt.geom.Ellipse2D;
 
 public class SemaphoreShape{
 
-    private Ellipse2D firstSideShape;
-    private Ellipse2D secondSideShape;
+    private final Ellipse2D firstSideShape;
+    private final Ellipse2D secondSideShape;
     private static final int SEMAPHORE_DIAMETER = 10;
-    private int xShift = 0;
-    private int yShift = 0;
 
     public SemaphoreShape(Pair<Integer, Integer> firstSide, Pair<Integer, Integer> secondSide, StreetType streetType) {
+        int xShift = 0;
+        int yShift = 0;
         if(streetType == StreetType.HORIZONTAL) {
             xShift = 30;
         } else {

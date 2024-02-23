@@ -2,7 +2,6 @@ package fe.app.model.tfmanagement.server;
 
 import fe.app.model.tfmanagement.client.ClientHandler;
 import fe.app.model.tfmanagement.presentation.EmptyResponse;
-import fe.app.model.tfmanagement.presentation.ServerStatus;
 import fe.app.model.tfmanagement.presentation.ServerStatusRequest;
 import fe.app.util.GsonUtils;
 
@@ -16,9 +15,9 @@ public class Server {
 
     public int port;
     private ServerSocket serverSocket;
-    private InetSocketAddress socket;
-    private TimingProcessor timingProcessor = new TimingProcessor();
-    private ServerView serverView;
+    private final InetSocketAddress socket;
+    private final TimingProcessor timingProcessor = new TimingProcessor();
+    private final ServerView serverView;
     private String serverType;
     private boolean crashed = false;
 
@@ -53,15 +52,14 @@ public class Server {
         }
         try {
             while (!serverSocket.isClosed()) {
-                System.out.println("fisso qua");
                 Socket socket = serverSocket.accept();
                 ServerHandler serverHandler = new ServerHandler(socket, timingProcessor);
                 serverHandler.start();
-                System.out.printf("Accepted connection from: %s, on local port %d\n",
+                System.out.printf("MAIN server: Accepted connection from: %s, on local port %d\n",
                         socket.getRemoteSocketAddress(), port);
             }
         } catch (SocketException e) {
-            System.out.println("CRASHATO");
+            System.out.println("MAIN server: crashed");
             crashState();
         }
     }
@@ -72,11 +70,11 @@ public class Server {
         ClientHandler backupServerHandler = new ClientHandler(socket, GsonUtils.createGson());
         while (!crashed) {
             try {
+                System.out.println("BACKUP server: is MAIN server up?");
                 backupServerHandler.rpc(new ServerStatusRequest(), EmptyResponse.class);
-                System.out.println("Server is up");
+                System.out.println("BACKUP server: MAIN server is up");
             } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("server is down");
+                System.out.println("BACKUP server: MAIN server is down");
                 break;
             }
             try {
@@ -85,12 +83,10 @@ public class Server {
                 throw new RuntimeException(e);
             }
         }
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaa");
 
         if (crashed) {
             crashState();
         } else {
-            System.out.println("starto coem main");
             serverSocket = new ServerSocket(port);
             startServerAsMain();
         }
@@ -103,13 +99,11 @@ public class Server {
         while (crashed) {
             Thread.sleep(1000);
         }
-        System.out.println("ESCO");
 
         try {
             serverSocket = new ServerSocket(port);
             startServerAsMain();
         } catch (SocketException e) {
-            System.out.println("erorkeork3'04if0'43f");
             startServerAsBackup();
         }
 

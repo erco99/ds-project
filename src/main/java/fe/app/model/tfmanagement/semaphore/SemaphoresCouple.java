@@ -16,7 +16,6 @@ public class SemaphoresCouple extends Thread {
     private Semaphore hStreetSemaphore;
     private Semaphore vStreetSemaphore;
     private InetSocketAddress socket;
-    public static final int PORT = 2000;
     private ClientHandler clientHandler;
     private final Gson gson;
     private Map<String, Double> timeMap;
@@ -27,13 +26,6 @@ public class SemaphoresCouple extends Thread {
         this.hStreetSemaphore = hStreetSemaphore;
         this.vStreetSemaphore = vStreetSemaphore;
         this.socket = new InetSocketAddress("localhost", port);
-        this.gson = GsonUtils.createGson();
-        this.controller = controller;
-    }
-    public SemaphoresCouple(Semaphore hStreetSemaphore, Semaphore vStreetSemaphore, Controller controller) {
-        this.hStreetSemaphore = hStreetSemaphore;
-        this.vStreetSemaphore = vStreetSemaphore;
-        this.socket = new InetSocketAddress("localhost", PORT);
         this.gson = GsonUtils.createGson();
         this.controller = controller;
     }
@@ -83,10 +75,8 @@ public class SemaphoresCouple extends Thread {
             timeMap.put(vStreetSemaphore.getId(), 20.0);
         }
 
-        try {
+        if (this.controller != null) {
             controller.updateViewTimingsTable(timeMap);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
         }
     }
 

@@ -10,9 +10,7 @@ import fe.app.util.Pair;
 import fe.app.util.StreetType;
 import org.junit.jupiter.api.*;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.util.concurrent.ExecutionException;
@@ -25,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestConnection {
 
     private static Server server;
-    public static final int PORT = 2000;
+    public static int port = 2020;
     private static StreetMap streetMap;
     private static MapContext mapContext;
     private static NetworkController networkController;
@@ -34,6 +32,11 @@ public class TestConnection {
     @BeforeAll
     public static void beforeAll() {
         streetMap = new StreetMap(null);
+    }
+
+    @BeforeEach
+    public void beforeEach() {
+        port++;
     }
 
     @Test
@@ -49,7 +52,7 @@ public class TestConnection {
                 StreetType.VERTICAL,
                 "S" +2);
 
-        SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, null);
+        SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, null, port);
 
         ExecutorService es = Executors.newSingleThreadExecutor();
         Future<?> future = es.submit(() -> {
@@ -64,7 +67,7 @@ public class TestConnection {
     public void testServerStatusWhenServerDown() {
         mapContext = new MapContext(streetMap);
         sensorsController = new SensorsController(mapContext);
-        networkController = new NetworkController(null, sensorsController);
+        networkController = new NetworkController(null, sensorsController, port);
         streetMap.setSensorsController(sensorsController);
 
         sensorsController.start();
@@ -77,6 +80,7 @@ public class TestConnection {
 
         //GUI is not running so it throws an exception
         assertThrows(ExecutionException.class, () -> future.get());
+
         assertFalse(networkController.isServerUp());
     }
 
@@ -84,7 +88,7 @@ public class TestConnection {
     public void testSemaphoresWhenServerUp() throws InterruptedException {
         Thread thread = new Thread(() -> {
             try {
-                server = new Server( new ServerSocket(PORT),  new InetSocketAddress("localhost", PORT),"main", PORT);
+                server = new Server( new ServerSocket(port),  new InetSocketAddress("localhost", port),"main", port);
                 server.startServerAsMain();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -107,7 +111,7 @@ public class TestConnection {
                 StreetType.VERTICAL,
                 "S" +2);
 
-        SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, null);
+        SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, null, port);
 
         System.out.println(semaphoresCouple.getTimeMap());
         semaphoresCouple.start();
@@ -123,7 +127,7 @@ public class TestConnection {
     public void testServerStatusWhenServerUp() throws InterruptedException {
         Thread thread = new Thread(() -> {
             try {
-                server = new Server( new ServerSocket(PORT),  new InetSocketAddress("localhost", PORT),"main", PORT);
+                server = new Server( new ServerSocket(port),  new InetSocketAddress("localhost", port),"main", port);
                 server.startServerAsMain();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -136,7 +140,7 @@ public class TestConnection {
 
         mapContext = new MapContext(streetMap);
         sensorsController = new SensorsController(mapContext);
-        networkController = new NetworkController(null, sensorsController);
+        networkController = new NetworkController(null, sensorsController, port);
         streetMap.setSensorsController(sensorsController);
 
         sensorsController.start();

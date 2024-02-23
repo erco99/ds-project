@@ -1,7 +1,4 @@
-import fe.app.controller.NetworkController;
-import fe.app.controller.SensorsController;
 import fe.app.model.elements.intersection.SensorsIntersection;
-import fe.app.model.elements.map.MapContext;
 import fe.app.model.elements.map.Sensor;
 import fe.app.model.elements.map.StreetMap;
 import fe.app.model.tfmanagement.semaphore.Semaphore;
@@ -15,7 +12,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.swing.plaf.TableHeaderUI;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -24,17 +20,18 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSystem {
-    public static int PORT = 2000;
+    public static int port = 2000;
     private static StreetMap streetMap;
     private static Server server;
-
-    private static MapContext mapContext;
-    private static NetworkController networkController;
-    private static SensorsController sensorsController;
 
     @BeforeAll
     public static void beforeAll() {
         streetMap = new StreetMap(null);
+    }
+
+    @BeforeEach
+    public void beforeEach() {
+        port++;
     }
 
     @Test
@@ -67,7 +64,7 @@ public class TestSystem {
     public void testTotalSemaphoreTime() throws InterruptedException {
         new Thread(() -> {
             try {
-                new Server( new ServerSocket(PORT),  new InetSocketAddress("localhost", PORT),"main", PORT).startServerAsMain();
+                new Server( new ServerSocket(port),  new InetSocketAddress("localhost", port),"main", port).startServerAsMain();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } catch (InterruptedException e) {
@@ -87,7 +84,7 @@ public class TestSystem {
                 StreetType.VERTICAL,
                 "S" +2);
 
-        SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, null);
+        SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, null, port);
         semaphoresCouple.start();
 
         Thread.sleep(3000);
@@ -99,7 +96,7 @@ public class TestSystem {
     public void testRemoteMode() throws InterruptedException {
         new Thread(() -> {
             try {
-                new Server( new ServerSocket(PORT),  new InetSocketAddress("localhost", PORT),"main", PORT).startServerAsMain();
+                new Server( new ServerSocket(port),  new InetSocketAddress("localhost", port),"main", port).startServerAsMain();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } catch (InterruptedException e) {
@@ -119,7 +116,7 @@ public class TestSystem {
                 StreetType.VERTICAL,
                 "S" +2);
 
-        SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, null);
+        SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, null, port);
         semaphoresCouple.start();
 
         Thread.sleep(3000);
@@ -132,7 +129,7 @@ public class TestSystem {
     public void testAutonomousModeAfterCrash() throws InterruptedException {
         new Thread(() -> {
             try {
-                server = new Server( new ServerSocket(2009),  new InetSocketAddress("localhost", 2009),"main", 2009);
+                server = new Server( new ServerSocket(2009),  new InetSocketAddress("localhost", 2009),"main", port);
                 server.startServerAsMain();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -153,7 +150,7 @@ public class TestSystem {
                 StreetType.VERTICAL,
                 "S" +2);
 
-        SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, null, 2009);
+        SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, null, port);
         semaphoresCouple.start();
 
         Thread.sleep(3000);

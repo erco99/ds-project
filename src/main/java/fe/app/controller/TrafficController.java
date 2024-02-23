@@ -11,7 +11,7 @@ public class TrafficController extends Thread {
 
     private static final int CAR_SPAWN_MILLIS = 700;
     private int vehiclesNumber;
-    private MapContext mapContext;
+    private final MapContext mapContext;
     private boolean run = true;
 
     public TrafficController(int vehiclesNumber, MapContext mapContext) {
@@ -34,6 +34,7 @@ public class TrafficController extends Thread {
             }
 
             try {
+                //noinspection BusyWait
                 sleep(CAR_SPAWN_MILLIS);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

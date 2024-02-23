@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class MapContext {
 
-    private ArrayList<Vehicle> vehicles;
-    private StreetMap streetMap;
+    private final ArrayList<Vehicle> vehicles;
+    private final StreetMap streetMap;
 
     public MapContext(StreetMap streetMap) {
         this.vehicles = new ArrayList<>();
