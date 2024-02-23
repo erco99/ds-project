@@ -129,7 +129,7 @@ public class TestSystem {
     public void testAutonomousModeAfterCrash() throws InterruptedException {
         new Thread(() -> {
             try {
-                server = new Server( new ServerSocket(2009),  new InetSocketAddress("localhost", 2009),"main", port);
+                server = new Server( new ServerSocket(port),  new InetSocketAddress("localhost", portx  ),"main", port);
                 server.startServerAsMain();
             } catch (IOException e) {
                 throw new RuntimeException(e);
