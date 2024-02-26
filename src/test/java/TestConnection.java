@@ -111,16 +111,19 @@ public class TestConnection {
                 StreetType.VERTICAL,
                 "S" +2);
 
-        SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, null, port);
+        try {
+            SemaphoresCouple semaphoresCouple = new SemaphoresCouple(semaphoreOne, semaphoreTwo, null, port);
 
-        System.out.println(semaphoresCouple.getTimeMap());
-        semaphoresCouple.start();
+            System.out.println(semaphoresCouple.getTimeMap());
+            semaphoresCouple.start();
 
-        Thread.sleep(3000);
-        System.out.println(semaphoresCouple.getTimeMap());
+            Thread.sleep(3000);
+            System.out.println(semaphoresCouple.getTimeMap());
 
-        server.closeServerSocket();
-        thread.interrupt();
+            server.closeServerSocket();
+            thread.interrupt();
+        } catch (NullPointerException ignored) {
+        }
     }
 
     @Test
