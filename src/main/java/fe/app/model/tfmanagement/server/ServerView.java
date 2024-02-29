@@ -57,10 +57,12 @@ public class ServerView implements ActionListener {
             this.stateButton.setText("DOWN");
             this.serverType.setText("");
             this.restartButton.setEnabled(true);
+            this.crashButton.setEnabled(false);
         }
         if(e.getSource() == this.restartButton) {
             this.server.restart();
             this.restartButton.setEnabled(false);
+            this.crashButton.setEnabled(true);
             this.stateButton.setBackground(Color.GREEN);
             this.stateButton.setText("UP");
         }
